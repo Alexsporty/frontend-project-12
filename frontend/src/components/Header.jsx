@@ -14,11 +14,7 @@ export default function Header() {
         <a className="navbar-brand" href="/">
           Hexlet Chat
         </a>
-        <button
-          onClick={handleExit}
-          type="button"
-          className="btn btn-primary"
-        >
+        <button onClick={handleExit} type="button" className="btn btn-primary">
           Выйти
         </button>
       </div>
