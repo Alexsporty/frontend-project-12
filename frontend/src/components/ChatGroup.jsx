@@ -5,9 +5,11 @@ import {
   sendMessage,
   sendChannels,
   removeChannel,
+  renameChannel,
 } from '../services/chat';
 import useChatSocket from '../hooks/useChatSocket';
-import AddChannelsModal from './ModalWindow';
+import AddChannelsModal from './AddChannelModal';
+import RenameChannelsModal from './RenameChannelModal';
 import { setCurrentChannel } from '../features/chat/chatSlice';
 
 export default function ChatGroup() {
@@ -16,6 +18,9 @@ export default function ChatGroup() {
   );
   const { username, token } = useSelector((state) => state.auth);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
+  const [channelToRename, setChannelToRename] = useState(null);
+
   const [message, setMessage] = useState('');
   const dispatch = useDispatch();
 
@@ -65,12 +70,26 @@ export default function ChatGroup() {
     dispatch(removeChannel({ id }));
   };
 
-  const handleAddChannel = (name) => {
-    dispatch(sendChannels({ name }));
-    handleClose();
-  };
   const handleOpen = () => setIsAddModalOpen(true);
   const handleClose = () => setIsAddModalOpen(false);
+  const handleAddChannel = (name) => {
+    dispatch(sendChannels({ name, removable: true }));
+    handleClose();
+  };
+
+  const handleOpenRename = (channel) => {
+    setChannelToRename(channel);
+    setIsRenameModalOpen(true);
+  };
+  const handleCloseRename = () => {
+    setIsRenameModalOpen(false);
+    setChannelToRename(null);
+  };
+  const handleRenameChannel = (newName) => {
+    if (!channelToRename) return;
+    dispatch(renameChannel({ id: channelToRename.id, name: newName }));
+    handleCloseRename();
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -144,24 +163,24 @@ export default function ChatGroup() {
                     </button>
                   )}
                   {group.removable && (
-                  <ul className="dropdown-menu">
-                    <li>
-                      <button
-                        className="dropdown-item"
-                        onClick={() => onRename(group)}
-                      >
-                        Переименовать
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        className="dropdown-item text-danger"
-                        onClick={() => onRemove(group.id)}
-                      >
-                        Удалить
-                      </button>
-                    </li>
-                  </ul>
+                    <ul className="dropdown-menu">
+                      <li>
+                        <button
+                          className="dropdown-item"
+                          onClick={() => handleOpenRename(group)}
+                        >
+                          Переименовать
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="dropdown-item text-danger"
+                          onClick={() => onRemove(group.id)}
+                        >
+                          Удалить
+                        </button>
+                      </li>
+                    </ul>
                   )}
                 </div>
               </li>
@@ -230,13 +249,25 @@ export default function ChatGroup() {
         </div>
       </div>
       <div className="Toastify"></div>
-      {isAddModalOpen && (
-        <AddChannelsModal
-          isOpen={isAddModalOpen}
-          onClose={handleClose}
-          onSubmit={handleAddChannel}
-        />
-      )}
+      <div>
+        {isAddModalOpen && (
+          <AddChannelsModal
+            isOpen={isAddModalOpen}
+            onClose={handleClose}
+            onSubmit={handleAddChannel}
+          />
+        )}
+      </div>
+      <div>
+        {isRenameModalOpen && (
+          <RenameChannelsModal
+            isOpen={isRenameModalOpen}
+            onClose={handleCloseRename}
+            onSubmit={handleRenameChannel}
+            channel={channelToRename}
+          />
+        )}
+      </div>
     </div>
   );
 }

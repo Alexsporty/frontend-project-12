@@ -44,6 +44,18 @@ export const sendChannels = createAsyncThunk(
   }
 );
 
+export const renameChannel = createAsyncThunk(
+  'chat/renameChannel',
+  async ({ id, name }) => {
+    const response = await axios.patch(
+      `/api/v1/channels/${id}`,
+      { name },
+      getAuthHeader()
+    );
+    return response.data.channel ? response.data.channel : response.data;
+  }
+);
+
 export const removeChannel = createAsyncThunk(
   'chat/removeChannel',
   async ({ id }) => {

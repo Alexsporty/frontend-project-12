@@ -4,7 +4,7 @@ export default function AddChannelsModal(props) {
   const { isOpen, onClose, onSubmit } = props;
 
   if (!isOpen) return null;
-  
+
   const [name, setName] = useState('');
 
   const handleSubmit = (e) => {
