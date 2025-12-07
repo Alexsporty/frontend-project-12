@@ -1,10 +1,15 @@
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { logoutUser } from '../features/auth/authSlice';
 
 export default function Header() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleExit = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    dispatch(logoutUser());
     navigate('/login');
   };
 

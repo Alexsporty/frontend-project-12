@@ -9,23 +9,29 @@ const authSlice = createSlice({
     status: 'idle', // 'loading', 'succeeded', 'failed'
     error: null,
   },
-  reducers: {},
+  reducers: {
+    logoutUser(state) {
+      state.username = null;
+      state.token = null;
+      state.isAuthenticated = false;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(loginUser.pending, (state) => {
-        state.status = 'loading'
-        state.error = null
+        state.status = 'loading';
+        state.error = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        state.status = 'succeeded' 
-        state.username = action.payload.username
-        state.token = action.payload.token
+        state.status = 'succeeded';
+        state.username = action.payload.username;
+        state.token = action.payload.token;
       })
       .addCase(loginUser.rejected, (state, action) => {
-        state.status = 'failed' 
-        state.error = action.error.message
+        state.status = 'failed';
+        state.error = action.error.message;
       });
   },
 });
-
-export default authSlice.reducer
+export const {logoutUser} = authSlice.actions;
+export default authSlice.reducer;
