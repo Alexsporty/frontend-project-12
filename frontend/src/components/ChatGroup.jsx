@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   initData,
@@ -23,6 +23,7 @@ export default function ChatGroup() {
 
   const [message, setMessage] = useState('');
   const dispatch = useDispatch();
+  const messageInputRef = useRef(null);
 
   useChatSocket(token);
 
@@ -35,6 +36,12 @@ export default function ChatGroup() {
       }
     });
   }, [dispatch, token]);
+
+  useEffect(() => {
+    if (messageInputRef.current) {
+      messageInputRef.current.focus();
+    }
+  }, [currentChannelId]);
 
   if (status === 'loading') {
     return (
@@ -103,8 +110,11 @@ export default function ChatGroup() {
       })
     );
     setMessage('');
+
+    if (messageInputRef.current) {
+      messageInputRef.current.focus();
+    }
   };
-  console.log(channels);
   return (
     <div className="container h-100 my-4 overflow-hidden rounded shadow">
       <div className="row h-100 bg-white flex-md-row">
@@ -215,6 +225,7 @@ export default function ChatGroup() {
               >
                 <div className="input-group has-validation">
                   <input
+                    ref={messageInputRef}
                     name="body"
                     onChange={(e) => setMessage(e.target.value)}
                     aria-label="Новое сообщение"

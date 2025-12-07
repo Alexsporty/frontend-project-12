@@ -1,21 +1,28 @@
-import { useState, useEffect } from 'react';
+import React from 'react';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import { Button, Form as BootstrapForm } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { renameChannel } from '../services/chat';
 
-export default function RenameChannelsModal(props) {
-  const { isOpen, onClose, onSubmit, channel } = props;
-  const [name, setName] = useState('');
-  if (!isOpen) return null;
+export default function RenameChannelsModal({ isOpen, onClose, channel }) {
+  const dispatch = useDispatch();
+  const channels = useSelector((state) => state.chat.channels);
 
-  useEffect(() => {
-    if (isOpen && channel) {
-      setName(channel.name);
-    }
-  }, [isOpen, channel]);
+  if (!isOpen || !channel) return null;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(name);
-    setName('');
-  };
+  const validationSchema = Yup.object({
+    name: Yup.string()
+      .min(3, 'Имя должно быть не менее 3 символов')
+      .max(20, 'Имя должно быть не более 20 символов')
+      .test(
+        'unique',
+        'Канал с таким именем уже существует',
+        (value) =>
+          !channels.some((c) => c.name === value && c.id !== channel.id)
+      )
+      .required('Введите имя канала'),
+  });
 
   return (
     <div
@@ -33,38 +40,68 @@ export default function RenameChannelsModal(props) {
               onClick={onClose}
               type="button"
               aria-label="Close"
-              data-bs-dismiss="modal"
               className="btn btn-close"
-            ></button>
+            />
           </div>
           <div className="modal-body">
-            <form onSubmit={handleSubmit} className="">
-              <div>
-                <input
-                  onChange={(e) => setName(e.target.value)}
-                  name="name"
-                  id="name"
-                  className="mb-2 form-control"
-                  value={name}
-                />
-                <label className="visually-hidden" htmlFor="name">
-                  Имя канала
-                </label>
-                <div className="invalid-feedback"></div>
-                <div className="d-flex justify-content-end">
-                  <button
-                    onClick={onClose}
-                    type="button"
-                    className="me-2 btn btn-secondary"
-                  >
-                    Отменить
-                  </button>
-                  <button type="submit" className="btn btn-primary">
-                    Отправить
-                  </button>
-                </div>
-              </div>
-            </form>
+            <Formik
+              initialValues={{ name: channel.name }}
+              validationSchema={validationSchema}
+              onSubmit={async (values, { setSubmitting, setErrors }) => {
+                try {
+                  await dispatch(
+                    renameChannel({ id: channel.id, name: values.name })
+                  ).unwrap();
+                  onClose();
+                } catch (err) {
+                  setErrors({
+                    name: err.message || 'Ошибка при переименовании канала',
+                  });
+                } finally {
+                  setSubmitting(false);
+                }
+              }}
+            >
+              {({
+                values,
+                handleChange,
+                handleSubmit,
+                errors,
+                isSubmitting,
+              }) => (
+                <BootstrapForm onSubmit={handleSubmit}>
+                  <BootstrapForm.Group className="mb-3">
+                    <BootstrapForm.Control
+                      type="text"
+                      name="name"
+                      value={values.name}
+                      onChange={handleChange}
+                      placeholder="Введите новое имя канала"
+                      isInvalid={!!errors.name}
+                    />
+                    <BootstrapForm.Control.Feedback type="invalid">
+                      {errors.name}
+                    </BootstrapForm.Control.Feedback>
+                  </BootstrapForm.Group>
+                  <div className="d-flex justify-content-end">
+                    <Button
+                      variant="secondary"
+                      className="me-2"
+                      onClick={onClose}
+                    >
+                      Отменить
+                    </Button>
+                    <Button
+                      type="submit"
+                      variant="primary"
+                      disabled={isSubmitting}
+                    >
+                      Переименовать
+                    </Button>
+                  </div>
+                </BootstrapForm>
+              )}
+            </Formik>
           </div>
         </div>
       </div>
