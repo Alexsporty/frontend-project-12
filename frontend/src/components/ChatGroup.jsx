@@ -20,8 +20,6 @@ export default function ChatGroup() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
   const [channelToRename, setChannelToRename] = useState(null);
-console.log(username);
-console.log(token);
   const [message, setMessage] = useState('');
   const dispatch = useDispatch();
   const messageInputRef = useRef(null);
