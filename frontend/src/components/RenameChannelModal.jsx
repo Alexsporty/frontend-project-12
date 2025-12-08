@@ -4,8 +4,10 @@ import * as Yup from 'yup';
 import { Button, Form as BootstrapForm } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { renameChannel } from '../services/chat';
+import { useTranslation } from 'react-i18next';
 
 export default function RenameChannelsModal({ isOpen, onClose, channel }) {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const channels = useSelector((state) => state.chat.channels);
 
@@ -13,15 +15,15 @@ export default function RenameChannelsModal({ isOpen, onClose, channel }) {
 
   const validationSchema = Yup.object({
     name: Yup.string()
-      .min(3, 'Имя должно быть не менее 3 символов')
-      .max(20, 'Имя должно быть не более 20 символов')
+      .min(3, t('errors.channelLength'))
+      .max(20, t('errors.channelLength'))
       .test(
         'unique',
-        'Канал с таким именем уже существует',
+        t('errors.channelAlready'),
         (value) =>
           !channels.some((c) => c.name === value && c.id !== channel.id)
       )
-      .required('Введите имя канала'),
+      .required(t('newChannel.nameChannel')),
   });
 
   return (
@@ -35,7 +37,7 @@ export default function RenameChannelsModal({ isOpen, onClose, channel }) {
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header">
-            <div className="modal-title h4">Переименовать канал</div>
+            <div className="modal-title h4">{t('renameChannel.rename')}</div>
             <button
               onClick={onClose}
               type="button"
@@ -55,7 +57,7 @@ export default function RenameChannelsModal({ isOpen, onClose, channel }) {
                   onClose();
                 } catch (err) {
                   setErrors({
-                    name: err.message || 'Ошибка при переименовании канала',
+                    name: err.message || t('errors.failedRenameChannel'),
                   });
                 } finally {
                   setSubmitting(false);
@@ -76,7 +78,7 @@ export default function RenameChannelsModal({ isOpen, onClose, channel }) {
                       name="name"
                       value={values.name}
                       onChange={handleChange}
-                      placeholder="Введите новое имя канала"
+                      placeholder={t('renameChannel.renameNew')}
                       isInvalid={!!errors.name}
                     />
                     <BootstrapForm.Control.Feedback type="invalid">
@@ -89,14 +91,14 @@ export default function RenameChannelsModal({ isOpen, onClose, channel }) {
                       className="me-2"
                       onClick={onClose}
                     >
-                      Отменить
+                      {t('newChannel.cancel')}
                     </Button>
                     <Button
                       type="submit"
                       variant="primary"
                       disabled={isSubmitting}
                     >
-                      Переименовать
+                      {t('renameChannel.renameButton')}
                     </Button>
                   </div>
                 </BootstrapForm>

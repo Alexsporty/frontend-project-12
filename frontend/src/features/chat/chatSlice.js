@@ -23,7 +23,7 @@ const chatSlice = createSlice({
     renameChannelSuccess(state, action) {
       const { id, name } = action.payload;
       const channel = state.channels.find((c) => c.id === id);
-      if (channel) channel.name = name; // name должно быть строкой
+      if (channel) channel.name = name; 
     },
   },
   extraReducers: (builder) => {

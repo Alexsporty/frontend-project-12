@@ -13,8 +13,10 @@ import {
   Row,
   Col,
 } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 export default function AuthForm() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = localStorage.getItem('token');
@@ -28,17 +30,17 @@ export default function AuthForm() {
 
   const validationSchema = Yup.object().shape({
     username: Yup.string()
-      .required('Имя пользователя обязательно')
-      .min(3, 'Минимум 3 символа')
-      .max(20, 'Максимум 20 символов'),
+      .required(t('errors.requiredField'))
+      .min(3, t('errors.usernameLength'))
+      .max(20, t('errors.usernameLength')),
     password: Yup.string()
-      .required('Пароль обязателен')
-      .min(6, 'Минимум 6 символов'),
+      .required(t('errors.requiredField'))
+      .min(6, t('errors.passwordLength')),
     confirmPassword: Yup.string().when('password', (password, schema) =>
       !isLogin
         ? schema
-            .required('Подтверждение пароля обязательно')
-            .oneOf([Yup.ref('password')], 'Пароли должны совпадать')
+            .required(t('errors.requiredPassword'))
+            .oneOf([Yup.ref('password')], t('auth.passwordMismatch'))
         : schema
     ),
   });
@@ -47,7 +49,9 @@ export default function AuthForm() {
     <Container className="mt-5">
       <Row className="justify-content-md-center">
         <Col md={6}>
-          <h1 className="mb-4">{isLogin ? 'Авторизация' : 'Регистрация'}</h1>
+          <h1 className="mb-4">
+            {isLogin ? t('auth.loginTitle') : t('auth.signupTitle')}
+          </h1>
           <Formik
             initialValues={{ username: '', password: '', confirmPassword: '' }}
             validationSchema={validationSchema}
@@ -72,12 +76,11 @@ export default function AuthForm() {
               } catch (err) {
                 if (!isLogin && err.response?.status === 409) {
                   setStatus({
-                    authError: 'Пользователь с таким именем уже существует',
+                    authError: t('errors.usernameAlready'),
                   });
                 } else {
                   setStatus({
-                    authError:
-                      'Ошибка: проверьте логин/пароль или попробуйте другое имя',
+                    authError: t('errors.nameOrPassword'),
                   });
                 }
               } finally {
@@ -96,14 +99,16 @@ export default function AuthForm() {
             }) => (
               <BootstrapForm onSubmit={handleSubmit}>
                 <BootstrapForm.Group className="mb-3">
-                  <BootstrapForm.Label>Имя пользователя</BootstrapForm.Label>
+                  <BootstrapForm.Label>
+                    {t('auth.usernameLabel')}
+                  </BootstrapForm.Label>
                   <BootstrapForm.Control
                     type="text"
                     name="username"
                     value={values.username}
                     onChange={handleChange}
                     isInvalid={touched.username && !!errors.username}
-                    placeholder="Введите имя пользователя"
+                    placeholder={t('auth.usernameEnter')}
                   />
                   <BootstrapForm.Control.Feedback type="invalid">
                     {errors.username}
@@ -111,14 +116,16 @@ export default function AuthForm() {
                 </BootstrapForm.Group>
 
                 <BootstrapForm.Group className="mb-3">
-                  <BootstrapForm.Label>Пароль</BootstrapForm.Label>
+                  <BootstrapForm.Label>
+                    {t('auth.passwordLabel')}
+                  </BootstrapForm.Label>
                   <BootstrapForm.Control
                     type="password"
                     name="password"
                     value={values.password}
                     onChange={handleChange}
                     isInvalid={touched.password && !!errors.password}
-                    placeholder="Введите пароль"
+                    placeholder={t('auth.passwordEnter')}
                   />
                   <BootstrapForm.Control.Feedback type="invalid">
                     {errors.password}
@@ -128,7 +135,7 @@ export default function AuthForm() {
                 {!isLogin && (
                   <BootstrapForm.Group className="mb-3">
                     <BootstrapForm.Label>
-                      Подтвердите пароль
+                      {t('auth.confirmPasswordLabel')}
                     </BootstrapForm.Label>
                     <BootstrapForm.Control
                       type="password"
@@ -138,7 +145,7 @@ export default function AuthForm() {
                       isInvalid={
                         touched.confirmPassword && !!errors.confirmPassword
                       }
-                      placeholder="Повторите пароль"
+                      placeholder={t('auth.confirmPasswordEnter')}
                     />
                     <BootstrapForm.Control.Feedback type="invalid">
                       {errors.confirmPassword}
@@ -151,7 +158,7 @@ export default function AuthForm() {
                 )}
 
                 <Button variant="primary" type="submit" disabled={isSubmitting}>
-                  {isLogin ? 'Войти' : 'Зарегистрироваться'}
+                  {isLogin ? t('auth.loginButton') : t('auth.signupButton')}
                 </Button>
                 <Button
                   variant="link"
@@ -159,7 +166,7 @@ export default function AuthForm() {
                   onClick={toggleMode}
                   disabled={isSubmitting}
                 >
-                  {isLogin ? 'Создать аккаунт' : 'Уже есть аккаунт? Войти'}
+                  {isLogin ? t('auth.toggleToSignup') : t('auth.toggleToLogin')}
                 </Button>
               </BootstrapForm>
             )}

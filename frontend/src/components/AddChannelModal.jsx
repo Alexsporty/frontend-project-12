@@ -5,8 +5,10 @@ import { Button, Form as BootstrapForm } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { sendChannels } from '../services/chat';
 import { setCurrentChannel } from '../features/chat/chatSlice';
+import { useTranslation } from 'react-i18next';
 
 export default function AddChannelsModal({ isOpen, onClose }) {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const channels = useSelector((state) => state.chat.channels);
 
@@ -14,14 +16,14 @@ export default function AddChannelsModal({ isOpen, onClose }) {
 
   const validationSchema = Yup.object({
     name: Yup.string()
-      .min(3, 'Имя должно быть не менее 3 символов')
-      .max(20, 'Имя должно быть не более 20 символов')
+      .min(3, t('errors.channelLength'))
+      .max(20, t('errors.channelLength'))
       .test(
         'unique',
-        'Канал с таким именем уже существует',
+        t('errors.channelAlready'),
         (value) => !channels.some((c) => c.name === value)
       )
-      .required('Введите имя канала'),
+      .required(t('newChannel.nameChannel')),
   });
 
   return (
@@ -35,7 +37,7 @@ export default function AddChannelsModal({ isOpen, onClose }) {
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header">
-            <div className="modal-title h4">Добавить канал</div>
+            <div className="modal-title h4">{t('newChannel.addChannel')}</div> 
             <button
               onClick={onClose}
               type="button"
@@ -58,7 +60,7 @@ export default function AddChannelsModal({ isOpen, onClose }) {
                   onClose();
                 } catch (err) {
                   setErrors({
-                    name: err.message || 'Ошибка при добавлении канала',
+                    name: err.message || t('errors.failedAddChannel'),
                   });
                 } finally {
                   setSubmitting(false);
@@ -79,7 +81,7 @@ export default function AddChannelsModal({ isOpen, onClose }) {
                       name="name"
                       value={values.name}
                       onChange={handleChange}
-                      placeholder="Введите имя канала"
+                      placeholder={t('newChannel.nameChannel')}
                       isInvalid={!!errors.name}
                     />
                     <BootstrapForm.Control.Feedback type="invalid">
@@ -92,14 +94,14 @@ export default function AddChannelsModal({ isOpen, onClose }) {
                       className="me-2"
                       onClick={onClose}
                     >
-                      Отменить
+                      {t('newChannel.cancel')}
                     </Button>
                     <Button
                       type="submit"
                       variant="primary"
                       disabled={isSubmitting}
                     >
-                      Создать
+                      {t('newChannel.create')}
                     </Button>
                   </div>
                 </BootstrapForm>

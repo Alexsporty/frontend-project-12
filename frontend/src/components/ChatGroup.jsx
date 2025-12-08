@@ -11,8 +11,10 @@ import useChatSocket from '../hooks/useChatSocket';
 import AddChannelsModal from './AddChannelModal';
 import RenameChannelsModal from './RenameChannelModal';
 import { setCurrentChannel } from '../features/chat/chatSlice';
+import { useTranslation } from 'react-i18next';
 
 export default function ChatGroup() {
+  const { t } = useTranslation();
   const { channels, messages, currentChannelId, status } = useSelector(
     (state) => state.chat
   );
@@ -56,7 +58,7 @@ export default function ChatGroup() {
   }
 
   if (status === 'failed') {
-    return <b>Ошибка загрузки данных</b>;
+    return <b>{t('errors.failed')}</b>;
   }
 
   const getChannelButtonClass = (channelId, currentChannelId) => {
@@ -119,7 +121,7 @@ export default function ChatGroup() {
       <div className="row h-100 bg-white flex-md-row">
         <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
           <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
-            <b>Каналы</b>
+            <b>{t('chatChannel.channels')}</b>
             <button
               onClick={handleOpen}
               type="button"
@@ -178,7 +180,7 @@ export default function ChatGroup() {
                           className="dropdown-item"
                           onClick={() => handleOpenRename(group)}
                         >
-                          Переименовать
+                          {t('chatChannel.renameChannel')}
                         </button>
                       </li>
                       <li>
@@ -186,7 +188,7 @@ export default function ChatGroup() {
                           className="dropdown-item text-danger"
                           onClick={() => onRemove(group.id)}
                         >
-                          Удалить
+                          {t('chatChannel.deleteChannel')}
                         </button>
                       </li>
                     </ul>
@@ -202,7 +204,10 @@ export default function ChatGroup() {
               <p className="m-0">
                 <b># {selectedChannel()}</b>
               </p>
-              <span className="text-muted"> {countMessages()} сообщений</span>
+              <span className="text-muted">
+                {' '}
+                {countMessages()} {t('chatChannel.countMessages')}
+              </span>
             </div>
             <div
               id="messages-box"
@@ -250,7 +255,7 @@ export default function ChatGroup() {
                         d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"
                       ></path>
                     </svg>
-                    <span className="visually-hidden">Отправить</span>
+                    <span className="visually-hidden">{t('chatChannel.sendMessage')}</span>
                   </button>
                 </div>
               </form>
