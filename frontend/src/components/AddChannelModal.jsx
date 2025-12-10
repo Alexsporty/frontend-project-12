@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { sendChannels } from '../services/chat';
 import { setCurrentChannel } from '../features/chat/chatSlice';
 import { useTranslation } from 'react-i18next';
+import leoProfanity from 'leo-profanity';
 
 export default function AddChannelsModal({ isOpen, onClose }) {
   const { t } = useTranslation();
@@ -51,8 +52,9 @@ export default function AddChannelsModal({ isOpen, onClose }) {
               validationSchema={validationSchema}
               onSubmit={async (values, { setSubmitting, setErrors }) => {
                 try {
+                  const cleaned = leoProfanity.clean(values.name)
                   const newChannel = await dispatch(
-                    sendChannels({ name: values.name })
+                    sendChannels({ name: cleaned })
                   ).unwrap();
                   if (newChannel?.id) {
                     dispatch(setCurrentChannel(newChannel.id));
@@ -79,7 +81,7 @@ export default function AddChannelsModal({ isOpen, onClose }) {
                     <BootstrapForm.Control
                       type="text"
                       name="name"
-                      value={values.name}
+                      value={leoProfanity.clean(values.name)}
                       onChange={handleChange}
                       placeholder={t('newChannel.nameChannel')}
                       isInvalid={!!errors.name}

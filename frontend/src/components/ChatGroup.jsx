@@ -12,9 +12,10 @@ import AddChannelsModal from './AddChannelModal';
 import RenameChannelsModal from './RenameChannelModal';
 import { setCurrentChannel } from '../features/chat/chatSlice';
 import { useTranslation } from 'react-i18next';
-
+import leoProfanity from 'leo-profanity';
 
 export default function ChatGroup() {
+  leoProfanity.loadDictionary('ru');
   const { t } = useTranslation();
   const { channels, messages, currentChannelId, status } = useSelector(
     (state) => state.chat
@@ -100,6 +101,11 @@ export default function ChatGroup() {
     handleCloseRename();
   };
 
+  const handleCleaned = (e) => {
+    const input = e.target.value;
+    const cleaned = leoProfanity.clean(input);
+    setMessage(cleaned);
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!message.trim()) return;
@@ -218,7 +224,7 @@ export default function ChatGroup() {
                 .filter((msg) => msg.channelId === currentChannelId)
                 .map((msg) => (
                   <div key={msg.id} className="text-break mb-2">
-                    <b>{msg.username}</b>:{msg.body}
+                    <b>{msg.username}</b>: {msg.body}
                   </div>
                 ))}
             </div>
@@ -232,7 +238,7 @@ export default function ChatGroup() {
                   <input
                     ref={messageInputRef}
                     name="body"
-                    onChange={(e) => setMessage(e.target.value)}
+                    onChange={handleCleaned}
                     aria-label="Новое сообщение"
                     placeholder="Введите сообщение..."
                     className="border-0 p-0 ps-2 form-control"

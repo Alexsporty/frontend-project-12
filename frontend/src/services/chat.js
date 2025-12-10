@@ -1,26 +1,14 @@
-import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import i18n from '../init';
 import { toastSuccess } from '../hooks/toastify';
 import { handleAxiosError } from '../utils/handleError';
-
-const getAuthHeader = () => {
-  const token = localStorage.getItem('token');
-  return { headers: { Authorization: `Bearer ${token}` } };
-};
+import api from '../utils/axiosInstance';
 
 export const initData = createAsyncThunk(
   'data/init',
   async (_, { rejectWithValue }) => {
     try {
-      const responseChannels = await axios.get(
-        '/api/v1/channels',
-        getAuthHeader()
-      );
-      const responseMessages = await axios.get(
-        '/api/v1/messages',
-        getAuthHeader()
-      );
+      const responseChannels = await api.get('/api/v1/channels');
+      const responseMessages = await api.get('/api/v1/messages');
 
       return {
         channels: responseChannels.data,
@@ -37,11 +25,7 @@ export const sendChannels = createAsyncThunk(
   'chat/sendChannels',
   async ({ name, removable }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        '/api/v1/channels',
-        { name, removable },
-        getAuthHeader()
-      );
+      const response = await api.post('/api/v1/channels', { name, removable });
       toastSuccess('success.channelCreated');
       return response.data;
     } catch (err) {
@@ -54,11 +38,7 @@ export const renameChannel = createAsyncThunk(
   'chat/renameChannel',
   async ({ id, name }, { rejectWithValue }) => {
     try {
-      const response = await axios.patch(
-        `/api/v1/channels/${id}`,
-        { name },
-        getAuthHeader()
-      );
+      const response = await api.patch(`/api/v1/channels/${id}`, { name });
       toastSuccess('success.channelRenamed');
       return response.data.channel ? response.data.channel : response.data;
     } catch (err) {
@@ -71,7 +51,7 @@ export const removeChannel = createAsyncThunk(
   'chat/removeChannel',
   async ({ id }, { rejectWithValue }) => {
     try {
-      await axios.delete(`/api/v1/channels/${id}`, getAuthHeader());
+      await api.delete(`/api/v1/channels/${id}`);
       toastSuccess('success.channelRemoved');
       return id;
     } catch (err) {
@@ -84,17 +64,13 @@ export const sendMessage = createAsyncThunk(
   'chat/sendMessage',
   async ({ body, channelId, username }, { rejectWithValue }) => {
     try {
-      await axios.post(
-        '/api/v1/messages',
-        {
-          body,
-          channelId,
-          username,
-        },
-        getAuthHeader()
-      );
+      await api.post('/api/v1/messages', {
+        body,
+        channelId,
+        username,
+      });
     } catch (err) {
-      rejectWithValue(handleAxiosError(err));
+      return rejectWithValue(handleAxiosError(err));
     }
   }
 );
