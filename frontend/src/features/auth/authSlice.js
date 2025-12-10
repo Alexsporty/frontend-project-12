@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { loginUser } from '../../services/auth.js';
+import { loginUser, signupUser } from '../../services/auth.js';
+import { toast } from 'react-toastify';
+import i18n from '../../init';
 
 const authSlice = createSlice({
   name: 'auth',
@@ -29,9 +31,13 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.error.message;
+        state.error = action.payload;
+      })
+      .addCase(signupUser.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload;
       });
   },
 });
-export const {logoutUser} = authSlice.actions;
+export const { logoutUser } = authSlice.actions;
 export default authSlice.reducer;

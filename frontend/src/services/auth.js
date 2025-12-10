@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { handleAxiosError } from '../utils/handleError';
 
 export const loginRequest = async (credentials) => {
   const response = await axios.post('/api/v1/login', credentials);
@@ -18,7 +19,19 @@ export const loginUser = createAsyncThunk(
       const data = await loginRequest(credentials);
       return data;
     } catch (err) {
-      return rejectWithValue(err.response.data);
+      return rejectWithValue(handleAxiosError(err));
+    }
+  }
+);
+
+export const signupUser = createAsyncThunk(
+  'auth/signupUser',
+  async (credentials, { rejectWithValue }) => {
+    try {
+      const data = await signupRequest(credentials);
+      return data;
+    } catch (err) {
+      return rejectWithValue(handleAxiosError(err));
     }
   }
 );

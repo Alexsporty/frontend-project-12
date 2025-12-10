@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logoutUser } from '../features/auth/authSlice';
 import { useTranslation } from 'react-i18next';
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function Header() {
   const { t } = useTranslation();

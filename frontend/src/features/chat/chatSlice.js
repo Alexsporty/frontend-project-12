@@ -1,5 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { initData, removeChannel, renameChannel } from '../../services/chat';
+import {
+  initData,
+  removeChannel,
+  renameChannel,
+  sendChannels,
+} from '../../services/chat';
+import { toast } from 'react-toastify';
+import i18n from '../../init';
 
 const chatSlice = createSlice({
   name: 'chat',
@@ -23,7 +30,7 @@ const chatSlice = createSlice({
     renameChannelSuccess(state, action) {
       const { id, name } = action.payload;
       const channel = state.channels.find((c) => c.id === id);
-      if (channel) channel.name = name; 
+      if (channel) channel.name = name;
     },
   },
   extraReducers: (builder) => {
@@ -51,7 +58,22 @@ const chatSlice = createSlice({
       })
       .addCase(initData.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.error.message;
+        state.error = action.payload;
+        toast.error(i18n.t(action.payload));
+      })
+      .addCase(sendChannels.rejected, (state, action) => {
+        state.error = action.payload;
+        toast.error(i18n.t(action.payload));
+      })
+
+      .addCase(renameChannel.rejected, (state, action) => {
+        state.error = action.payload;
+        toast.error(i18n.t(action.payload));
+      })
+
+      .addCase(removeChannel.rejected, (state, action) => {
+        state.error = action.payload;
+        toast.error(i18n.t(action.payload));
       });
   },
 });
