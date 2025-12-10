@@ -9,6 +9,13 @@ import 'react-toastify/dist/ReactToastify.css';
 const App = () => {
   return (
     <>
+    <button
+    onClick={() => {
+      throw new Error('Production Rollbar test error');
+    }}
+  >
+    Test Rollbar Error
+  </button>
     <Routes>
       <Route
         path="/"
