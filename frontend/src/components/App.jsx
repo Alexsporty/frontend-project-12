@@ -5,20 +5,10 @@ import NotFound from './NotFound';
 import ProtectedRoute from '../ProtectedRoute';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useEffect } from 'react';
 
 const App = () => {
   return (
     <>
-    <button
-  onClick={() => {
-    setTimeout(() => {
-      throw new Error('Production Rollbar async test error');
-    });
-  }}
->
-  Test Rollbar Error
-</button>
     <Routes>
       <Route
         path="/"
