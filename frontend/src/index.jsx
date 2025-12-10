@@ -6,17 +6,27 @@ import App from './components/App.jsx';
 import store from './app/store.js';
 import './init.jsx'; // импортируем наш i18next
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
+
+const rollbarConfig = {
+  accessToken:
+    'bcdcfec33720485984824a4f3a03afd9',
+  environment: 'production',
+};
 
 const app = () => {
   const root = ReactDOM.createRoot(document.querySelector('#chat'));
   root.render(
-    <Provider store={store}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-    </Provider>
+    <RollbarProvider config={rollbarConfig}>
+    <ErrorBoundary>
+      <Provider store={store}>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+      </Provider>
+    </ErrorBoundary>
+  </RollbarProvider>
   );
 };
 
 app();
-
