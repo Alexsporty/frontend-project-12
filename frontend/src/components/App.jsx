@@ -8,14 +8,17 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from 'react';
 
 const App = () => {
-  useEffect(() => {
-    setTimeout(() => {
-      throw new Error("Prod startup test – should appear in Rollbar");
-    }, 1000);
-  }, []);
-  
   return (
     <>
+    <button
+  onClick={() => {
+    setTimeout(() => {
+      throw new Error('Production Rollbar async test error');
+    });
+  }}
+>
+  Test Rollbar Error
+</button>
     <Routes>
       <Route
         path="/"
