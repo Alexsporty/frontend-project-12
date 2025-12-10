@@ -5,17 +5,17 @@ import NotFound from './NotFound';
 import ProtectedRoute from '../ProtectedRoute';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useEffect } from 'react';
 
 const App = () => {
+  useEffect(() => {
+    setTimeout(() => {
+      throw new Error("Prod startup test – should appear in Rollbar");
+    }, 1000);
+  }, []);
+  
   return (
     <>
-    <button
-    onClick={() => {
-      throw new Error('Production Rollbar test error');
-    }}
-  >
-    Test Rollbar Error
-  </button>
     <Routes>
       <Route
         path="/"
