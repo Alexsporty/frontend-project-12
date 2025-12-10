@@ -11,10 +11,10 @@ const App = () => {
     <>
     <button
     onClick={() => {
-      throw new Error('Production Rollbar test error гусь');
+      throw new Error('Production Rollbar test error');
     }}
   >
-    Test Rollbar Error гусь
+    Test Rollbar Error
   </button>
     <Routes>
       <Route

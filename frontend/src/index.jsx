@@ -7,10 +7,10 @@ import store from './app/store.js';
 import './init.jsx'; // импортируем наш i18next
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
-
+//bcdcfec33720485984824a4f3a03afd9
 const rollbarConfig = {
   accessToken:
-    'bcdcfec33720485984824a4f3a03afd9',
+    'ac487932f0ded5ec0ef6494f85e05b69',
   environment: 'production',
 };
 
