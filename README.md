@@ -18,8 +18,7 @@
 ---
 
 ## Локальный запуск
-
-1. **Клонировать репозиторий**:
+**Клонировать репозиторий**:
 git clone https://github.com/Alexsporty/frontend-project-12.git
 cd frontend-project-12
 
