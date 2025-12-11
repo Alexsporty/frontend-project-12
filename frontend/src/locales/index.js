@@ -38,9 +38,9 @@ export default {
         renameNew: 'Введите новое название канала',
       },
       success: {
-        channelCreated: 'Канал успешно создан',
-        channelRenamed: 'Канал успешно переименован',
-        channelRemoved: 'Канал успешно удалён',
+        channelCreated: 'Канал создан',
+        channelRenamed: 'Канал переименован',
+        channelRemoved: 'Канал удалён',
       },
       errors: {
         requiredField: 'Обязательное поле',
@@ -50,8 +50,8 @@ export default {
         usernameAlready: 'Пользователь с таким именем уже существует',
         nameOrPassword:
           'Ошибка: проверьте логин/пароль или попробуйте другое имя',
-        channelLength: 'Название канала должно быть от 3 до 20 символов',
-        channelAlready: 'Канал с таким названием уже существует',
+        channelLength: 'Имя канала должно быть от 3 до 20 символов',
+        channelAlready: 'Должно быть уникальным',
         failedAddChannel: 'Ошибка при добавлении канала',
         failedRenameChannel: 'Ошибка при переименовании канала',
         failed: 'Ошибка загрузки данных',

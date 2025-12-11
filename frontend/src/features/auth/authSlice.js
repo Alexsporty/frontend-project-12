@@ -8,6 +8,7 @@ const authSlice = createSlice({
   initialState: {
     username: null,
     token: null,
+    isAuthenticated: false,
     status: 'idle', // 'loading', 'succeeded', 'failed'
     error: null,
   },
@@ -16,6 +17,7 @@ const authSlice = createSlice({
       state.username = null;
       state.token = null;
       state.isAuthenticated = false;
+      localStorage.removeItem('token');
     },
   },
   extraReducers: (builder) => {
@@ -28,6 +30,8 @@ const authSlice = createSlice({
         state.status = 'succeeded';
         state.username = action.payload.username;
         state.token = action.payload.token;
+        localStorage.setItem('token', action.payload.token);
+        state.isAuthenticated = true;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.status = 'failed';

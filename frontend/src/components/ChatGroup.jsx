@@ -184,18 +184,18 @@ export default function ChatGroup() {
                     <ul className="dropdown-menu">
                       <li>
                         <button
-                          className="dropdown-item"
-                          onClick={() => handleOpenRename(group)}
-                        >
-                          {t('chatChannel.renameChannel')}
-                        </button>
-                      </li>
-                      <li>
-                        <button
                           className="dropdown-item text-danger"
                           onClick={() => onRemove(group.id)}
                         >
                           {t('chatChannel.deleteChannel')}
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="dropdown-item"
+                          onClick={() => handleOpenRename(group)}
+                        >
+                          {t('chatChannel.renameChannel')}
                         </button>
                       </li>
                     </ul>
