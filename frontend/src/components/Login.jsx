@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate, Navigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../services/auth.js';
 import { loginRequest, signupRequest } from '../services/auth.js';
@@ -20,13 +20,16 @@ export default function AuthForm() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = localStorage.getItem('token');
-  const [isLogin, setIsLogin] = useState(true);
+  const initialIsLogin = location.pathname === '/login';
+  const [isLogin, setIsLogin] = useState(initialIsLogin);
+
+  useEffect(() => {
+    setIsLogin(location.pathname === '/login');
+  }, [location.pathname]);
 
   if (token) {
     return <Navigate to="/" replace />;
   }
-
-  const toggleMode = () => setIsLogin(!isLogin);
 
   const validationSchema = Yup.object().shape({
     username: Yup.string()
@@ -99,16 +102,14 @@ export default function AuthForm() {
             }) => (
               <BootstrapForm onSubmit={handleSubmit}>
                 <BootstrapForm.Group className="mb-3">
-                  <BootstrapForm.Label>
-                    {t('auth.usernameLabel')}
-                  </BootstrapForm.Label>
+                  <BootstrapForm.Label></BootstrapForm.Label>
                   <BootstrapForm.Control
                     type="text"
                     name="username"
                     value={values.username}
                     onChange={handleChange}
                     isInvalid={touched.username && !!errors.username}
-                    placeholder={t('auth.usernameEnter')}
+                    placeholder={isLogin ? t('auth.usernameEnter') : t('auth.usernameLabel')}
                   />
                   <BootstrapForm.Control.Feedback type="invalid">
                     {errors.username}
@@ -116,9 +117,7 @@ export default function AuthForm() {
                 </BootstrapForm.Group>
 
                 <BootstrapForm.Group className="mb-3">
-                  <BootstrapForm.Label>
-                    {t('auth.passwordLabel')}
-                  </BootstrapForm.Label>
+                  <BootstrapForm.Label></BootstrapForm.Label>
                   <BootstrapForm.Control
                     type="password"
                     name="password"
@@ -134,9 +133,7 @@ export default function AuthForm() {
 
                 {!isLogin && (
                   <BootstrapForm.Group className="mb-3">
-                    <BootstrapForm.Label>
-                      {t('auth.confirmPasswordLabel')}
-                    </BootstrapForm.Label>
+                    <BootstrapForm.Label></BootstrapForm.Label>
                     <BootstrapForm.Control
                       type="password"
                       name="confirmPassword"
@@ -145,7 +142,7 @@ export default function AuthForm() {
                       isInvalid={
                         touched.confirmPassword && !!errors.confirmPassword
                       }
-                      placeholder={t('auth.confirmPasswordEnter')}
+                      placeholder={t('auth.confirmPasswordLabel')}
                     />
                     <BootstrapForm.Control.Feedback type="invalid">
                       {errors.confirmPassword}
@@ -163,7 +160,9 @@ export default function AuthForm() {
                 <Button
                   variant="link"
                   type="button"
-                  onClick={toggleMode}
+                  onClick={() => {
+                    navigate(isLogin ? '/signup' : '/login');
+                  }}
                   disabled={isSubmitting}
                 >
                   {isLogin ? t('auth.toggleToSignup') : t('auth.toggleToLogin')}

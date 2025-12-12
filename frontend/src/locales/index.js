@@ -4,12 +4,11 @@ export default {
   ru: {
     translation: {
       auth: {
-        loginTitle: 'Авторизация',
+        loginTitle: 'Войти',
         signupTitle: 'Регистрация',
         usernameLabel: 'Имя пользователя',
-        usernameEnter: 'Введите имя пользователя',
-        passwordLabel: 'Пароль',
-        passwordEnter: 'Введите пароль',
+        usernameEnter: 'Ваш ник',
+        passwordEnter: 'Пароль',
         confirmPasswordLabel: 'Подтвердите пароль',
         confirmPasswordEnter: 'Повторите пароль',
         loginButton: 'Войти',
@@ -44,12 +43,12 @@ export default {
       },
       errors: {
         requiredField: 'Обязательное поле',
-        usernameLength: 'Имя пользователя должно быть от 3 до 20 символов',
-        passwordLength: 'Пароль должен быть не менее 6 символов',
-        requiredPassword: 'Подтверждение пароля обязательно',
-        usernameAlready: 'Пользователь с таким именем уже существует',
+        usernameLength: 'От 3 до 20 символов',
+        passwordLength: 'Не менее 6 символов',
+        requiredPassword: 'Пароли должны совпадать',
+        usernameAlready: 'Такой пользователь уже существует',
         nameOrPassword:
-          'Ошибка: проверьте логин/пароль или попробуйте другое имя',
+          'Неверные имя пользователя или пароль',
         channelLength: 'Имя канала должно быть от 3 до 20 символов',
         channelAlready: 'Должно быть уникальным',
         failedAddChannel: 'Ошибка при добавлении канала',

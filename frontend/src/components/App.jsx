@@ -21,6 +21,7 @@ const App = () => {
         }
       />
       <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Login isSignup />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
     <ToastContainer position="top-right" autoClose={3000}/>
