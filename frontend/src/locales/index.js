@@ -15,6 +15,7 @@ export default {
         logoutButton: 'Выйти',
         signupButton: 'Зарегистрироваться',
         toggleToSignup: 'Регистрация',
+        notAccount: 'Нет аккаунта?',
         toggleToLogin: 'Уже есть аккаунт? Войти',
         passwordMismatch: 'Пароли должны совпадать',
       },

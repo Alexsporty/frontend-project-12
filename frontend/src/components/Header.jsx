@@ -9,7 +9,6 @@ export default function Header() {
   const dispatch = useDispatch();
 
   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated)
-  console.log(isLoggedIn);
   const handleExit = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
