@@ -1,4 +1,8 @@
 # Hexlet Chat
+### Hexlet tests and linter status:
+
+[![hexlet-check](https://github.com/Alexsporty/frontend-project-12/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/Alexsporty/frontend-project-12/actions)
+
 
 **Hexlet Chat** — это веб-приложение для общения в режиме реального времени. Пользователи могут регистрироваться, авторизовываться, создавать каналы, отправлять сообщения и управлять каналами.  
 
