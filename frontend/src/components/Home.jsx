@@ -1,4 +1,3 @@
-import Header from './Header';
 import ChatGroup from './ChatGroup';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../services/auth';
@@ -11,13 +10,12 @@ export default function Home() {
     const token = localStorage.getItem('token');
     const username = localStorage.getItem('username');
     if (token && username) {
-      dispatch(loginUser.fulfilled({ token, username })); // кладём токен в состояние
+      dispatch(loginUser.fulfilled({ token, username }));
     }
   }, [dispatch]);
 
   return (
     <div className="d-flex flex-column h-100">
-      <Header />
       <ChatGroup />
     </div>
   );

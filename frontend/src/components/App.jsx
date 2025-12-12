@@ -5,10 +5,12 @@ import NotFound from './NotFound';
 import ProtectedRoute from '../ProtectedRoute';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Header from './Header';
 
 const App = () => {
   return (
     <>
+    <Header />
     <Routes>
       <Route
         path="/"
