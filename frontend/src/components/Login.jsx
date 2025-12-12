@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate, Navigate, useLocation } from 'react-router-dom';
@@ -18,18 +18,13 @@ import { useTranslation } from 'react-i18next';
 export default function AuthForm() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
+
   const token = localStorage.getItem('token');
-  const initialIsLogin = location.pathname === '/login';
-  const [isLogin, setIsLogin] = useState(initialIsLogin);
+  if (token) return <Navigate to="/" replace />;
 
-  useEffect(() => {
-    setIsLogin(location.pathname === '/login');
-  }, [location.pathname]);
-
-  if (token) {
-    return <Navigate to="/" replace />;
-  }
+  const isLogin = location.pathname === '/login';
 
   const validationSchema = Yup.object().shape({
     username: Yup.string()
@@ -55,6 +50,7 @@ export default function AuthForm() {
           <h1 className="mb-4">
             {isLogin ? t('auth.loginTitle') : t('auth.signupTitle')}
           </h1>
+
           <Formik
             initialValues={{ username: '', password: '', confirmPassword: '' }}
             validationSchema={validationSchema}
@@ -72,19 +68,16 @@ export default function AuthForm() {
                     password: values.password,
                   });
                 }
+
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('username', data.username);
                 dispatch(loginUser.fulfilled(data));
                 navigate('/');
               } catch (err) {
                 if (!isLogin && err.response?.status === 409) {
-                  setStatus({
-                    authError: t('errors.usernameAlready'),
-                  });
+                  setStatus({ authError: t('errors.usernameAlready') });
                 } else {
-                  setStatus({
-                    authError: t('errors.nameOrPassword'),
-                  });
+                  setStatus({ authError: t('errors.nameOrPassword') });
                 }
               } finally {
                 setSubmitting(false);
@@ -139,9 +132,7 @@ export default function AuthForm() {
                       name="confirmPassword"
                       value={values.confirmPassword}
                       onChange={handleChange}
-                      isInvalid={
-                        touched.confirmPassword && !!errors.confirmPassword
-                      }
+                      isInvalid={touched.confirmPassword && !!errors.confirmPassword}
                       placeholder={t('auth.confirmPasswordLabel')}
                     />
                     <BootstrapForm.Control.Feedback type="invalid">
@@ -157,12 +148,11 @@ export default function AuthForm() {
                 <Button variant="primary" type="submit" disabled={isSubmitting}>
                   {isLogin ? t('auth.loginButton') : t('auth.signupButton')}
                 </Button>
+
                 <Button
                   variant="link"
                   type="button"
-                  onClick={() => {
-                    navigate(isLogin ? '/signup' : '/login');
-                  }}
+                  onClick={() => navigate(isLogin ? '/signup' : '/login')}
                   disabled={isSubmitting}
                 >
                   {isLogin ? t('auth.toggleToSignup') : t('auth.toggleToLogin')}
