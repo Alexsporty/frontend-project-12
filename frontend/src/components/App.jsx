@@ -10,6 +10,12 @@ import Header from './Header';
 const App = () => {
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        closeOnClick
+        pauseOnHover
+      />
       <Header />
       <Routes>
         <Route
@@ -24,12 +30,6 @@ const App = () => {
         <Route path="/signup" element={<Login isSignup />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        closeOnClick
-        pauseOnHover
-      />
     </>
   );
 };
