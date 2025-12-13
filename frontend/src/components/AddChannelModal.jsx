@@ -7,7 +7,6 @@ import { sendChannels } from '../services/chat';
 import { setCurrentChannel } from '../features/chat/chatSlice';
 import { useTranslation } from 'react-i18next';
 import leoProfanity from 'leo-profanity';
-import { toastSuccess } from '../hooks/toastify';
 
 export default function AddChannelsModal({ isOpen, onClose }) {
   const { t } = useTranslation();
@@ -62,7 +61,6 @@ console.log(channels);
                 try {
                   if (newChannel?.id) {
                     dispatch(setCurrentChannel(newChannel.id));
-                    toastSuccess('success.channelCreated');
                   }
                   onClose();
                 } catch (err) {
