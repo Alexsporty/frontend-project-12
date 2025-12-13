@@ -7,6 +7,7 @@ import { sendChannels } from '../services/chat';
 import { setCurrentChannel } from '../features/chat/chatSlice';
 import { useTranslation } from 'react-i18next';
 import leoProfanity from 'leo-profanity';
+import { toastSuccess } from '../hooks/toastify';
 
 export default function AddChannelsModal({ isOpen, onClose }) {
   const { t } = useTranslation();
@@ -53,23 +54,23 @@ console.log(channels);
             <Formik
               initialValues={{ name: '' }}
               validationSchema={validationSchema}
-              onSubmit={(values, { setSubmitting, setErrors }) => {
+              onSubmit={async (values, { setSubmitting, setErrors }) => {
                 const cleaned = leoProfanity.clean(values.name);
-                const newChannel = dispatch(
+                const newChannel = await dispatch(
                   sendChannels({ name: cleaned, removable: true })
                 ).unwrap();
                 try {
                   if (newChannel?.id) {
                     dispatch(setCurrentChannel(newChannel.id));
+                    toastSuccess('success.channelCreated');
                   }
-                  // onClose();
+                  onClose();
                 } catch (err) {
                   setErrors({
                     name: err.message || t('errors.failedAddChannel'),
                   });
                 } finally {
                   setSubmitting(false);
-                  setTimeout(onClose, 300)
                 }
               }}
             >
