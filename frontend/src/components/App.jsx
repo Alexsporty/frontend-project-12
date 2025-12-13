@@ -10,21 +10,26 @@ import Header from './Header';
 const App = () => {
   return (
     <>
-    <Header />
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <ProtectedRoute>
-            <Home />
-          </ProtectedRoute>
-        }
+      <Header />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Login isSignup />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        closeOnClick
+        pauseOnHover
       />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Login isSignup />} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-    <ToastContainer position="top-right" autoClose={3000}/>
     </>
   );
 };
