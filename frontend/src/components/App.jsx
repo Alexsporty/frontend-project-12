@@ -13,7 +13,7 @@ const App = () => {
     <div className="d-flex flex-column h-100">
       <ToastContainer
         position="top-right"
-        autoClose={10000}
+        autoClose={5000}
         closeOnClick
         pauseOnHover
       />
