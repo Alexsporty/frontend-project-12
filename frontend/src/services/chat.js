@@ -26,7 +26,7 @@ export const sendChannels = createAsyncThunk(
   async ({ name, removable }, { rejectWithValue }) => {
     try {
       const response = await api.post('/api/v1/channels', { name, removable });
-      toastSuccess('Канал создан');
+      toastSuccess('success.channelCreated');
       return response.data;
     } catch (err) {
       return rejectWithValue(handleAxiosError(err));
