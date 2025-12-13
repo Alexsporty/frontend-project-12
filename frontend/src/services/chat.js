@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { toastSuccess } from '../hooks/toastify.jsx';
+import { toastSuccess } from '../hooks/toastify';
 import { handleAxiosError } from '../utils/handleError';
 import api from '../utils/axiosInstance';
 

@@ -1,38 +1,58 @@
 import { Routes, Route } from 'react-router-dom';
-import Home from './Home';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+
 import Login from './Login';
 import NotFound from './NotFound';
 import ProtectedRoute from '../ProtectedRoute';
+import Header from './Header';
+import ChatGroup from './ChatGroup';
+
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Header from './Header';
+
+import { loginUser } from '../services/auth';
 
 const App = () => {
+  const dispatch = useDispatch();
+
+  // 🔑 автологин при старте приложения
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const username = localStorage.getItem('username');
+
+    if (token && username) {
+      dispatch(loginUser.fulfilled({ token, username }));
+    }
+  }, [dispatch]);
+
   return (
     <>
     <div className="d-flex flex-column h-100">
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        closeOnClick
-        pauseOnHover
-      />
       <Header />
+
       <Routes>
         <Route
           path="/"
           element={
             <ProtectedRoute>
-              <Home />
+              <ChatGroup />
             </ProtectedRoute>
           }
         />
+
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Login isSignup />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-      </div>
-    </>
+    </div>
+    <ToastContainer
+    position="top-right"
+    autoClose={5000}
+    closeOnClick
+    pauseOnHover
+  />
+  </>
   );
 };
 

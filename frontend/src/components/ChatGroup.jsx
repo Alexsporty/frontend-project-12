@@ -272,7 +272,6 @@ export default function ChatGroup() {
           </div>
         </div>
       </div>
-      <div className="Toastify"></div>
       <div>
         {isAddModalOpen && (
           <AddChannelsModal
