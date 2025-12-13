@@ -13,7 +13,6 @@ import RenameChannelsModal from './RenameChannelModal';
 import { setCurrentChannel } from '../features/chat/chatSlice';
 import { useTranslation } from 'react-i18next';
 import leoProfanity from 'leo-profanity';
-import { toastSuccess } from '../hooks/toastify';
 
 export default function ChatGroup() {
   leoProfanity.loadDictionary('ru');

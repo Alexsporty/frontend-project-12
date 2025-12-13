@@ -10,6 +10,7 @@ import Header from './Header';
 const App = () => {
   return (
     <>
+    <div className="d-flex flex-column h-100">
       <ToastContainer
         position="top-right"
         autoClose={10000}
@@ -30,6 +31,7 @@ const App = () => {
         <Route path="/signup" element={<Login isSignup />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      </div>
     </>
   );
 };
