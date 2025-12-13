@@ -2,7 +2,6 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { toastSuccess } from '../hooks/toastify';
 import { handleAxiosError } from '../utils/handleError';
 import api from '../utils/axiosInstance';
-import { toast } from 'react-toastify';
 
 export const initData = createAsyncThunk(
   'data/init',
@@ -27,7 +26,7 @@ export const sendChannels = createAsyncThunk(
   async ({ name, removable }, { rejectWithValue }) => {
     try {
       const response = await api.post('/api/v1/channels', { name, removable });
-      toast.success('Канал создан');
+      toastSuccess('success.channelCreated');
       return response.data;
     } catch (err) {
       return rejectWithValue(handleAxiosError(err));

@@ -53,22 +53,23 @@ console.log(channels);
             <Formik
               initialValues={{ name: '' }}
               validationSchema={validationSchema}
-              onSubmit={async (values, { setSubmitting, setErrors }) => {
+              onSubmit={(values, { setSubmitting, setErrors }) => {
                 const cleaned = leoProfanity.clean(values.name);
-                const newChannel = await dispatch(
+                const newChannel = dispatch(
                   sendChannels({ name: cleaned, removable: true })
                 ).unwrap();
                 try {
                   if (newChannel?.id) {
                     dispatch(setCurrentChannel(newChannel.id));
                   }
-                  onClose();
+                  // onClose();
                 } catch (err) {
                   setErrors({
                     name: err.message || t('errors.failedAddChannel'),
                   });
                 } finally {
                   setSubmitting(false);
+                  setTimeout(onClose, 300)
                 }
               }}
             >
