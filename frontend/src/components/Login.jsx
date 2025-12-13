@@ -18,7 +18,7 @@ export default function AuthForm() {
 
   const isLogin = location.pathname === '/login';
 
-  const validationSchema = Yup.object().shape({
+  const signupSchema = Yup.object().shape({
     username: Yup.string()
       .required(t('errors.requiredField'))
       .min(3, t('errors.usernameLength'))
@@ -34,6 +34,14 @@ export default function AuthForm() {
         : schema
     ),
   });
+
+  const loginSchema = Yup.object().shape({
+    username: Yup.string().required(t('errors.pass')),
+    password: Yup.string().required(t('errors.pass')),
+  });
+
+  const validationSchema = isLogin ? loginSchema : signupSchema;
+
 
   return (
     <Container className="mt-5">
