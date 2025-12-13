@@ -17,8 +17,11 @@ export default function AddChannelsModal({ isOpen, onClose }) {
 
   const validationSchema = Yup.object({
     name: Yup.string()
-      .min(3, t('errors.channelLength'))
-      .max(20, t('errors.channelLength'))
+      .test(
+        'length',
+        t('errors.channelLength'),
+        (value) => value && value.length >= 3 && value.length <= 20
+      )
       .test(
         'unique',
         t('errors.channelAlready'),
@@ -38,7 +41,7 @@ export default function AddChannelsModal({ isOpen, onClose }) {
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header">
-            <div className="modal-title h4">{t('newChannel.addChannel')}</div> 
+            <div className="modal-title h4">{t('newChannel.addChannel')}</div>
             <button
               onClick={onClose}
               type="button"
@@ -51,11 +54,11 @@ export default function AddChannelsModal({ isOpen, onClose }) {
               initialValues={{ name: '' }}
               validationSchema={validationSchema}
               onSubmit={async (values, { setSubmitting, setErrors }) => {
+                const cleaned = leoProfanity.clean(values.name);
+                const newChannel = await dispatch(
+                  sendChannels({ name: cleaned })
+                ).unwrap();
                 try {
-                  const cleaned = leoProfanity.clean(values.name)
-                  const newChannel = await dispatch(
-                    sendChannels({ name: cleaned })
-                  ).unwrap();
                   if (newChannel?.id) {
                     dispatch(setCurrentChannel(newChannel.id));
                   }
@@ -85,6 +88,9 @@ export default function AddChannelsModal({ isOpen, onClose }) {
                       onChange={handleChange}
                       isInvalid={!!errors.name}
                     />
+                    <label class="visually-hidden" for="name">
+                      Имя канала
+                    </label>
                     <BootstrapForm.Control.Feedback type="invalid">
                       {errors.name}
                     </BootstrapForm.Control.Feedback>

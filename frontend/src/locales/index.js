@@ -27,6 +27,7 @@ export default {
         sendMessage: 'отправить',
       },
       newChannel: {
+        channelName: 'Имя канала',
         addChannel: 'Добавить канал',
         nameChannel: 'Введите название канала',
         cancel: 'Отменить',
