@@ -12,7 +12,7 @@ export default function AddChannelsModal({ isOpen, onClose }) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const channels = useSelector((state) => state.chat.channels);
-
+console.log(channels);
   if (!isOpen) return null;
 
   const validationSchema = Yup.object({
@@ -56,7 +56,7 @@ export default function AddChannelsModal({ isOpen, onClose }) {
               onSubmit={async (values, { setSubmitting, setErrors }) => {
                 const cleaned = leoProfanity.clean(values.name);
                 const newChannel = await dispatch(
-                  sendChannels({ name: cleaned })
+                  sendChannels({ name: cleaned, removable: true })
                 ).unwrap();
                 try {
                   if (newChannel?.id) {
@@ -88,7 +88,7 @@ export default function AddChannelsModal({ isOpen, onClose }) {
                       onChange={handleChange}
                       isInvalid={!!errors.name}
                     />
-                    <label class="visually-hidden" for="name">
+                    <label className="visually-hidden" htmlFor="name">
                       Имя канала
                     </label>
                     <BootstrapForm.Control.Feedback type="invalid">
