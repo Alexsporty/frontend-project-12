@@ -28,31 +28,31 @@ const App = () => {
 
   return (
     <>
-    <div className="d-flex flex-column h-100">
-      <Header />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        closeOnClick
+        pauseOnHover
+      />
+      <div className="d-flex flex-column h-100">
+        <Header />
 
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <ChatGroup />
-            </ProtectedRoute>
-          }
-        />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <ChatGroup />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Login isSignup />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </div>
-    <ToastContainer
-    position="top-right"
-    autoClose={5000}
-    closeOnClick
-    pauseOnHover
-  />
-  </>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Login isSignup />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div>
+    </>
   );
 };
 
