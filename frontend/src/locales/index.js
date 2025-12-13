@@ -30,7 +30,7 @@ export default {
         addChannel: 'Добавить канал',
         nameChannel: 'Введите название канала',
         cancel: 'Отменить',
-        create: 'Создать',
+        create: 'Отправить',
       },
       renameChannel: {
         renameButton: 'Переименовать',
@@ -51,7 +51,7 @@ export default {
         usernameAlready: 'Такой пользователь уже существует',
         nameOrPassword:
           'Неверные имя пользователя или пароль',
-        channelLength: 'Имя канала должно быть от 3 до 20 символов',
+        channelLength: 'От 3 до 20 символов',
         channelAlready: 'Должно быть уникальным',
         failedAddChannel: 'Ошибка при добавлении канала',
         failedRenameChannel: 'Ошибка при переименовании канала',

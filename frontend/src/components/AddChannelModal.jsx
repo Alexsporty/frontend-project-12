@@ -24,7 +24,7 @@ export default function AddChannelsModal({ isOpen, onClose }) {
         t('errors.channelAlready'),
         (value) => !channels.some((c) => c.name === value)
       )
-      .required(t('newChannel.nameChannel')),
+      .required(t('errors.requiredField')),
   });
 
   return (
@@ -83,7 +83,6 @@ export default function AddChannelsModal({ isOpen, onClose }) {
                       name="name"
                       value={leoProfanity.clean(values.name)}
                       onChange={handleChange}
-                      placeholder={t('newChannel.nameChannel')}
                       isInvalid={!!errors.name}
                     />
                     <BootstrapForm.Control.Feedback type="invalid">

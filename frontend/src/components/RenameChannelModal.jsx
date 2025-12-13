@@ -23,7 +23,7 @@ export default function RenameChannelsModal({ isOpen, onClose, channel }) {
         (value) =>
           !channels.some((c) => c.name === value && c.id !== channel.id)
       )
-      .required(t('newChannel.nameChannel')),
+      .required(t('errors.requiredField')),
   });
 
   return (
@@ -78,7 +78,6 @@ export default function RenameChannelsModal({ isOpen, onClose, channel }) {
                       name="name"
                       value={values.name}
                       onChange={handleChange}
-                      placeholder={t('renameChannel.renameNew')}
                       isInvalid={!!errors.name}
                     />
                     <BootstrapForm.Control.Feedback type="invalid">
@@ -98,7 +97,7 @@ export default function RenameChannelsModal({ isOpen, onClose, channel }) {
                       variant="primary"
                       disabled={isSubmitting}
                     >
-                      {t('renameChannel.renameButton')}
+                      {t('newChannel.create')}
                     </Button>
                   </div>
                 </BootstrapForm>
