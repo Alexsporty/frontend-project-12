@@ -28,12 +28,6 @@ const App = () => {
 
   return (
     <>
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        closeOnClick
-        pauseOnHover
-      />
       <div className="d-flex flex-column h-100">
         <Header />
 

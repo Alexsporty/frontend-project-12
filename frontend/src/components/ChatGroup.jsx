@@ -13,7 +13,7 @@ import RenameChannelsModal from './RenameChannelModal';
 import { setCurrentChannel } from '../features/chat/chatSlice';
 import { useTranslation } from 'react-i18next';
 import leoProfanity from 'leo-profanity';
-import { toastSuccess } from '../hooks/toastify';
+import { ToastContainer } from 'react-toastify';
 
 export default function ChatGroup() {
   leoProfanity.loadDictionary('ru');
@@ -125,6 +125,7 @@ export default function ChatGroup() {
     }
   };
   return (
+    <>
     <div className="container h-100 my-4 overflow-hidden rounded shadow">
       <div className="row h-100 bg-white flex-md-row">
         <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
@@ -279,6 +280,7 @@ export default function ChatGroup() {
             isOpen={isAddModalOpen}
             onClose={handleClose}
             onSubmit={handleAddChannel}
+            
           />
         )}
       </div>
@@ -293,5 +295,12 @@ export default function ChatGroup() {
         )}
       </div>
     </div>
+    <ToastContainer
+    position="top-right"
+    autoClose={3000}
+    closeOnClick
+    pauseOnHover
+  />
+  </>
   );
 }
