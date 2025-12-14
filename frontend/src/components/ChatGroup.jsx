@@ -14,6 +14,7 @@ import { setCurrentChannel } from '../features/chat/chatSlice';
 import { useTranslation } from 'react-i18next';
 import leoProfanity from 'leo-profanity';
 import { ToastContainer } from 'react-toastify';
+import { toastSuccess } from '../hooks/toastify';
 
 export default function ChatGroup() {
   leoProfanity.loadDictionary('ru');

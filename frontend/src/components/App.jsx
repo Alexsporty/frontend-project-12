@@ -47,6 +47,10 @@ const App = () => {
         </Routes>
       </div>
       <ToastContainer
+    position="top-right"
+    autoClose={3000}
+    closeOnClick
+    pauseOnHover
   />
     </>
   );
