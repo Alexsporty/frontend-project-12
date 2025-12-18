@@ -1,47 +1,46 @@
-import React from 'react';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
-import { useNavigate, Navigate, useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { loginUser, loginRequest, signupRequest } from '../services/auth.js';
-import { Alert, Container, Row, Col, Button } from 'react-bootstrap';
-import { useTranslation } from 'react-i18next';
+import React from "react"
+import { Formik } from "formik"
+import * as Yup from "yup"
+import { useNavigate, Navigate, useLocation } from "react-router-dom"
+import { useDispatch } from "react-redux"
+import { loginUser, loginRequest, signupRequest } from "../services/auth.js"
+import { Alert, Container, Row, Col, Button } from "react-bootstrap"
+import { useTranslation } from "react-i18next"
 
 export default function AuthForm() {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const dispatch = useDispatch();
+  const { t } = useTranslation()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const dispatch = useDispatch()
 
-  const token = localStorage.getItem('token');
-  if (token) return <Navigate to="/" replace />;
+  const token = localStorage.getItem("token")
+  if (token) return <Navigate to="/" replace />
 
-  const isLogin = location.pathname === '/login';
+  const isLogin = location.pathname === "/login"
 
   const signupSchema = Yup.object().shape({
     username: Yup.string()
-      .required(t('errors.requiredField'))
-      .min(3, t('errors.usernameLength'))
-      .max(20, t('errors.usernameLength')),
+      .required(t("errors.requiredField"))
+      .min(3, t("errors.usernameLength"))
+      .max(20, t("errors.usernameLength")),
     password: Yup.string()
-      .required(t('errors.requiredField'))
-      .min(6, t('errors.passwordLength')),
-    confirmPassword: Yup.string().when('password', (password, schema) =>
+      .required(t("errors.requiredField"))
+      .min(6, t("errors.passwordLength")),
+    confirmPassword: Yup.string().when("password", (password, schema) =>
       !isLogin
         ? schema
-            .required(t('errors.requiredPassword'))
-            .oneOf([Yup.ref('password')], t('auth.passwordMismatch'))
-        : schema
+            .required(t("errors.requiredPassword"))
+            .oneOf([Yup.ref("password")], t("auth.passwordMismatch"))
+        : schema,
     ),
-  });
+  })
 
   const loginSchema = Yup.object().shape({
-    username: Yup.string().required(t('errors.pass')),
-    password: Yup.string().required(t('errors.pass')),
-  });
+    username: Yup.string().required(t("errors.pass")),
+    password: Yup.string().required(t("errors.pass")),
+  })
 
-  const validationSchema = isLogin ? loginSchema : signupSchema;
-
+  const validationSchema = isLogin ? loginSchema : signupSchema
 
   return (
     <Container className="mt-5">
@@ -55,15 +54,15 @@ export default function AuthForm() {
                 <img
                   src={
                     isLogin
-                      ? '/src/assets/avatar-DIE1AEpS.jpg'
-                      : '/src/assets/avatar_1-D7Cot-zE.jpg'
+                      ? "/src/assets/avatar-DIE1AEpS.jpg"
+                      : "/src/assets/avatar_1-D7Cot-zE.jpg"
                   }
                   className="rounded-circle"
-                  alt={isLogin ? 'Войти' : 'Регистрация'}
+                  alt={isLogin ? "Войти" : "Регистрация"}
                   style={{
-                    width: '150px',
-                    height: '150px',
-                    objectFit: 'cover',
+                    width: "150px",
+                    height: "150px",
+                    objectFit: "cover",
                   }}
                 />
               </div>
@@ -71,41 +70,41 @@ export default function AuthForm() {
               {/* FORM */}
               <Formik
                 initialValues={{
-                  username: '',
-                  password: '',
-                  confirmPassword: '',
+                  username: "",
+                  password: "",
+                  confirmPassword: "",
                 }}
                 validationSchema={validationSchema}
                 onSubmit={async (values, { setSubmitting, setStatus }) => {
                   try {
-                    let data;
+                    let data
 
                     if (isLogin) {
                       data = await loginRequest({
                         username: values.username,
                         password: values.password,
-                      });
+                      })
                     } else {
                       data = await signupRequest({
                         username: values.username,
                         password: values.password,
-                      });
+                      })
                     }
 
-                    localStorage.setItem('token', data.token);
-                    localStorage.setItem('username', data.username);
+                    localStorage.setItem("token", data.token)
+                    localStorage.setItem("username", data.username)
 
-                    dispatch(loginUser.fulfilled(data));
+                    dispatch(loginUser.fulfilled(data))
 
-                    navigate('/');
+                    navigate("/")
                   } catch (err) {
                     if (!isLogin && err.response?.status === 409) {
-                      setStatus({ authError: t('errors.usernameAlready') });
+                      setStatus({ authError: t("errors.usernameAlready") })
                     } else {
-                      setStatus({ authError: t('errors.nameOrPassword') });
+                      setStatus({ authError: t("errors.nameOrPassword") })
                     }
                   } finally {
-                    setSubmitting(false);
+                    setSubmitting(false)
                   }
                 }}
               >
@@ -118,10 +117,10 @@ export default function AuthForm() {
                   errors,
                   touched,
                 }) => (
-                  <div className={isLogin ? 'w-100 mt-3 mt-md-0' : 'w-50'}>
+                  <div className={isLogin ? "w-100 mt-3 mt-md-0" : "w-50"}>
                     <form onSubmit={handleSubmit}>
                       <h1 className="text-center mb-4">
-                        {isLogin ? t('auth.loginTitle') : t('auth.signupTitle')}
+                        {isLogin ? t("auth.loginTitle") : t("auth.signupTitle")}
                       </h1>
 
                       {/* Username */}
@@ -134,19 +133,19 @@ export default function AuthForm() {
                           onChange={handleChange}
                           className={`form-control ${
                             touched.username && errors.username
-                              ? 'is-invalid'
-                              : ''
+                              ? "is-invalid"
+                              : ""
                           }`}
                           placeholder={
                             isLogin
-                              ? t('auth.usernameEnter')
-                              : t('auth.usernameLabel')
+                              ? t("auth.usernameEnter")
+                              : t("auth.usernameLabel")
                           }
                         />
                         <label htmlFor="username">
                           {isLogin
-                            ? t('auth.usernameEnter')
-                            : t('auth.usernameLabel')}
+                            ? t("auth.usernameEnter")
+                            : t("auth.usernameLabel")}
                         </label>
                         <div className="invalid-tooltip">{errors.username}</div>
                       </div>
@@ -161,13 +160,13 @@ export default function AuthForm() {
                           onChange={handleChange}
                           className={`form-control ${
                             touched.password && errors.password
-                              ? 'is-invalid'
-                              : ''
+                              ? "is-invalid"
+                              : ""
                           }`}
-                          placeholder={t('auth.passwordEnter')}
+                          placeholder={t("auth.passwordEnter")}
                         />
                         <label htmlFor="password">
-                          {t('auth.passwordEnter')}
+                          {t("auth.passwordEnter")}
                         </label>
                         <div className="invalid-tooltip">{errors.password}</div>
                       </div>
@@ -183,13 +182,13 @@ export default function AuthForm() {
                             onChange={handleChange}
                             className={`form-control ${
                               touched.confirmPassword && errors.confirmPassword
-                                ? 'is-invalid'
-                                : ''
+                                ? "is-invalid"
+                                : ""
                             }`}
-                            placeholder={t('auth.confirmPasswordLabel')}
+                            placeholder={t("auth.confirmPasswordLabel")}
                           />
                           <label htmlFor="confirmPassword">
-                            {t('auth.confirmPasswordLabel')}
+                            {t("auth.confirmPasswordLabel")}
                           </label>
                           <div className="invalid-tooltip">
                             {errors.confirmPassword}
@@ -209,8 +208,8 @@ export default function AuthForm() {
                         disabled={isSubmitting}
                       >
                         {isLogin
-                          ? t('auth.loginButton')
-                          : t('auth.signupButton')}
+                          ? t("auth.loginButton")
+                          : t("auth.signupButton")}
                       </button>
                     </form>
                   </div>
@@ -222,13 +221,13 @@ export default function AuthForm() {
             {isLogin && (
               <div className="card-footer p-4">
                 <div className="text-center">
-                  <span>{t('auth.notAccount')}</span>{' '}
+                  <span>{t("auth.notAccount")}</span>{" "}
                   <Button
                     variant="link"
                     type="button"
-                    onClick={() => navigate('/signup')}
+                    onClick={() => navigate("/signup")}
                   >
-                    {t('auth.signupTitle')}
+                    {t("auth.signupTitle")}
                   </Button>
                 </div>
               </div>
@@ -237,5 +236,5 @@ export default function AuthForm() {
         </Col>
       </Row>
     </Container>
-  );
+  )
 }

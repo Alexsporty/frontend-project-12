@@ -1,135 +1,135 @@
-import React from 'react';
-import { useEffect, useState, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from "react"
+import { useEffect, useState, useRef } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import {
   initData,
   sendMessage,
   sendChannels,
   removeChannel,
   renameChannel,
-} from '../services/chat';
-import RemoveChannelModal from './RemoveChannel';
-import useChatSocket from '../hooks/useChatSocket';
-import AddChannelsModal from './AddChannelModal';
-import RenameChannelsModal from './RenameChannelModal';
-import { setCurrentChannel } from '../features/chat/chatSlice';
-import { useTranslation } from 'react-i18next';
-import leoProfanity from 'leo-profanity';
-leoProfanity.add(leoProfanity.getDictionary('ru'));
-leoProfanity.add(leoProfanity.getDictionary('en'));
+} from "../services/chat"
+import RemoveChannelModal from "./RemoveChannel"
+import useChatSocket from "../hooks/useChatSocket"
+import AddChannelsModal from "./AddChannelModal"
+import RenameChannelsModal from "./RenameChannelModal"
+import { setCurrentChannel } from "../features/chat/chatSlice"
+import { useTranslation } from "react-i18next"
+import leoProfanity from "leo-profanity"
+leoProfanity.add(leoProfanity.getDictionary("ru"))
+leoProfanity.add(leoProfanity.getDictionary("en"))
 
 export default function ChatGroup() {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
   const { channels, messages, currentChannelId, status } = useSelector(
-    (state) => state.chat
-  );
-  const { username, token } = useSelector((state) => state.auth);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
-  const [channelToRename, setChannelToRename] = useState(null);
-  const [message, setMessage] = useState('');
-  const [channelToRemove, setChannelToRemove] = useState(null);
-  const dispatch = useDispatch();
-  const messageInputRef = useRef(null);
+    (state) => state.chat,
+  )
+  const { username, token } = useSelector((state) => state.auth)
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+  const [isRenameModalOpen, setIsRenameModalOpen] = useState(false)
+  const [channelToRename, setChannelToRename] = useState(null)
+  const [message, setMessage] = useState("")
+  const [channelToRemove, setChannelToRemove] = useState(null)
+  const dispatch = useDispatch()
+  const messageInputRef = useRef(null)
 
-  useChatSocket(token);
+  useChatSocket(token)
 
   useEffect(() => {
-    if (!token) return;
+    if (!token) return
     dispatch(initData()).then((action) => {
-      const firstChannelId = action.payload?.channels?.[0]?.id;
+      const firstChannelId = action.payload?.channels?.[0]?.id
       if (firstChannelId) {
-        dispatch(setCurrentChannel(firstChannelId));
+        dispatch(setCurrentChannel(firstChannelId))
       }
-    });
-  }, [dispatch, token]);
+    })
+  }, [dispatch, token])
 
   useEffect(() => {
     if (messageInputRef.current) {
-      messageInputRef.current.focus();
+      messageInputRef.current.focus()
     }
-  }, [currentChannelId]);
+  }, [currentChannelId])
 
-  if (status === 'loading') {
+  if (status === "loading") {
     return (
       <div
         className="d-flex justify-content-center align-items-center"
-        style={{ height: '100vh' }}
+        style={{ height: "100vh" }}
       >
         <div className="spinner-border text-primary" role="status">
           <span className="visually-hidden">Loading...</span>
         </div>
       </div>
-    );
+    )
   }
 
-  if (status === 'failed') {
-    return <b>{t('errors.failed')}</b>;
+  if (status === "failed") {
+    return <b>{t("errors.failed")}</b>
   }
 
   const getChannelButtonClass = (channelId, currentChannelId) => {
     return `w-100 rounded-0 text-start btn ${
-      channelId === currentChannelId ? 'btn-secondary' : 'btn-light'
-    }`;
-  };
+      channelId === currentChannelId ? "btn-secondary" : "btn-light"
+    }`
+  }
 
   const countMessages = () => {
-    return messages.filter((msg) => msg.channelId === currentChannelId).length;
-  };
+    return messages.filter((msg) => msg.channelId === currentChannelId).length
+  }
   const selectedChannel = () => {
-    return channels.find((c) => c.id === currentChannelId)?.name;
-  };
+    return channels.find((c) => c.id === currentChannelId)?.name
+  }
 
-  const handleOpen = () => setIsAddModalOpen(true);
-  const handleClose = () => setIsAddModalOpen(false);
+  const handleOpen = () => setIsAddModalOpen(true)
+  const handleClose = () => setIsAddModalOpen(false)
   const handleAddChannel = (name) => {
-    dispatch(sendChannels({ name, removable: true }));
-    handleClose();
-  };
+    dispatch(sendChannels({ name, removable: true }))
+    handleClose()
+  }
 
   const handleOpenRename = (channel) => {
-    setChannelToRename(channel);
-    setIsRenameModalOpen(true);
-  };
+    setChannelToRename(channel)
+    setIsRenameModalOpen(true)
+  }
   const handleCloseRename = () => {
-    setIsRenameModalOpen(false);
-    setChannelToRename(null);
-  };
+    setIsRenameModalOpen(false)
+    setChannelToRename(null)
+  }
   const handleRenameChannel = (newName) => {
-    if (!channelToRename) return;
-    dispatch(renameChannel({ id: channelToRename.id, name: newName }));
-    handleCloseRename();
-  };
+    if (!channelToRename) return
+    dispatch(renameChannel({ id: channelToRename.id, name: newName }))
+    handleCloseRename()
+  }
 
   const censor = (value) =>
-    leoProfanity.check(value) ? '*'.repeat(value.length) : value;
+    leoProfanity.check(value) ? "*".repeat(value.length) : value
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!message.trim()) return;
+    e.preventDefault()
+    if (!message.trim()) return
 
-    const cleanedMessage = censor(message);
+    const cleanedMessage = censor(message)
 
     dispatch(
       sendMessage({
         body: cleanedMessage,
         channelId: currentChannelId,
         username,
-      })
-    );
-    setMessage('');
+      }),
+    )
+    setMessage("")
 
     if (messageInputRef.current) {
-      messageInputRef.current.focus();
+      messageInputRef.current.focus()
     }
-  };
+  }
   return (
     <>
       <div className="container h-100 my-4 overflow-hidden rounded shadow">
         <div className="row h-100 bg-white flex-md-row">
           <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
             <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
-              <b>{t('chatChannel.channels')}</b>
+              <b>{t("chatChannel.channels")}</b>
               <button
                 onClick={handleOpen}
                 type="button"
@@ -161,7 +161,7 @@ export default function ChatGroup() {
                       type="button"
                       className={getChannelButtonClass(
                         group.id,
-                        currentChannelId
+                        currentChannelId,
                       )}
                     >
                       <span className="me-1">#</span>
@@ -172,7 +172,7 @@ export default function ChatGroup() {
                         type="button"
                         className={`btn dropdown-toggle dropdown-toggle-split${getChannelButtonClass(
                           group.id,
-                          currentChannelId
+                          currentChannelId,
                         )} rounded-end`}
                         data-bs-toggle="dropdown"
                         aria-label="Управление каналом"
@@ -189,7 +189,7 @@ export default function ChatGroup() {
                             className="dropdown-item text-danger"
                             onClick={() => setChannelToRemove(group)}
                           >
-                            {t('chatChannel.deleteChannel')}
+                            {t("chatChannel.deleteChannel")}
                           </button>
                         </li>
                         <li>
@@ -197,7 +197,7 @@ export default function ChatGroup() {
                             className="dropdown-item"
                             onClick={() => handleOpenRename(group)}
                           >
-                            {t('chatChannel.renameChannel')}
+                            {t("chatChannel.renameChannel")}
                           </button>
                         </li>
                       </ul>
@@ -214,8 +214,8 @@ export default function ChatGroup() {
                   <b># {selectedChannel()}</b>
                 </p>
                 <span className="text-muted">
-                  {' '}
-                  {countMessages()} {t('chatChannel.countMessages')}
+                  {" "}
+                  {countMessages()} {t("chatChannel.countMessages")}
                 </span>
               </div>
               <div
@@ -265,7 +265,7 @@ export default function ChatGroup() {
                         ></path>
                       </svg>
                       <span className="visually-hidden">
-                        {t('chatChannel.sendMessage')}
+                        {t("chatChannel.sendMessage")}
                       </span>
                     </button>
                   </div>
@@ -294,19 +294,18 @@ export default function ChatGroup() {
           )}
         </div>
         <div>
-        {channelToRemove && (
-  <RemoveChannelModal
-    channel={channelToRemove}
-    onClose={() => setChannelToRemove(null)}
-    onConfirm={() => {
-      dispatch(removeChannel({ id: channelToRemove.id }));
-      setChannelToRemove(null);
-    }}
-  />
-)}
-
+          {channelToRemove && (
+            <RemoveChannelModal
+              channel={channelToRemove}
+              onClose={() => setChannelToRemove(null)}
+              onConfirm={() => {
+                dispatch(removeChannel({ id: channelToRemove.id }))
+                setChannelToRemove(null)
+              }}
+            />
+          )}
         </div>
       </div>
     </>
-  );
+  )
 }

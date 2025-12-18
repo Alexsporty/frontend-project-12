@@ -1,31 +1,31 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import React from "react"
+import { Routes, Route } from "react-router-dom"
+import { useEffect } from "react"
+import { useDispatch } from "react-redux"
 
-import Login from './Login';
-import NotFound from './NotFound';
-import ProtectedRoute from '../ProtectedRoute';
-import Header from './Header';
-import ChatGroup from './ChatGroup';
+import Login from "./Login"
+import NotFound from "./NotFound"
+import ProtectedRoute from "../ProtectedRoute"
+import Header from "./Header"
+import ChatGroup from "./ChatGroup"
 
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
-import { loginUser } from '../services/auth';
+import { loginUser } from "../services/auth"
 
 const App = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   // 🔑 автологин при старте приложения
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const username = localStorage.getItem('username');
+    const token = localStorage.getItem("token")
+    const username = localStorage.getItem("username")
 
     if (token && username) {
-      dispatch(loginUser.fulfilled({ token, username }));
+      dispatch(loginUser.fulfilled({ token, username }))
     }
-  }, [dispatch]);
+  }, [dispatch])
 
   return (
     <>
@@ -48,13 +48,13 @@ const App = () => {
         </Routes>
       </div>
       <ToastContainer
-    position="top-right"
-    autoClose={3000}
-    closeOnClick
-    pauseOnHover
-  />
+        position="top-right"
+        autoClose={3000}
+        closeOnClick
+        pauseOnHover
+      />
     </>
-  );
-};
+  )
+}
 
-export default App;
+export default App
