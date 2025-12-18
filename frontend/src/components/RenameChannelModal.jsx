@@ -56,6 +56,7 @@ export default function RenameChannelsModal({ isOpen, onClose, channel }) {
           <div className="modal-body">
             <Formik
               initialValues={{ name: channel.name }}
+              enableReinitialize
               validationSchema={validationSchema}
               onSubmit={async (values, { setSubmitting, setErrors }) => {
                 const renameCensor = censorChannelName(values.name);
