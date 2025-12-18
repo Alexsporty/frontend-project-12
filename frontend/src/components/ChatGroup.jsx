@@ -7,6 +7,7 @@ import {
   removeChannel,
   renameChannel,
 } from '../services/chat';
+import RemoveChannelModal from './RemoveChannel';
 import useChatSocket from '../hooks/useChatSocket';
 import AddChannelsModal from './AddChannelModal';
 import RenameChannelsModal from './RenameChannelModal';
@@ -26,6 +27,7 @@ export default function ChatGroup() {
   const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
   const [channelToRename, setChannelToRename] = useState(null);
   const [message, setMessage] = useState('');
+  const [channelToRemove, setChannelToRemove] = useState(null);
   const dispatch = useDispatch();
   const messageInputRef = useRef(null);
 
@@ -75,10 +77,6 @@ export default function ChatGroup() {
   };
   const selectedChannel = () => {
     return channels.find((c) => c.id === currentChannelId)?.name;
-  };
-
-  const onRemove = (id) => {
-    dispatch(removeChannel({ id }));
   };
 
   const handleOpen = () => setIsAddModalOpen(true);
@@ -188,7 +186,7 @@ export default function ChatGroup() {
                         <li>
                           <button
                             className="dropdown-item text-danger"
-                            onClick={() => onRemove(group.id)}
+                            onClick={() => setChannelToRemove(group)}
                           >
                             {t('chatChannel.deleteChannel')}
                           </button>
@@ -293,6 +291,19 @@ export default function ChatGroup() {
               channel={channelToRename}
             />
           )}
+        </div>
+        <div>
+        {channelToRemove && (
+  <RemoveChannelModal
+    channel={channelToRemove}
+    onClose={() => setChannelToRemove(null)}
+    onConfirm={() => {
+      dispatch(removeChannel({ id: channelToRemove.id }));
+      setChannelToRemove(null);
+    }}
+  />
+)}
+
         </div>
       </div>
     </>
