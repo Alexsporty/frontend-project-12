@@ -15,9 +15,9 @@ export default function useChatSocket(token) {
 
     const socket = initSocket(token)
 
-    const handleNewMessage = msg => dispatch(addMessage(msg))
-    const handleNewChannel = channel => dispatch(addChannel(channel))
-    const handleRenameChannel = channel =>
+    const handleNewMessage = (msg) => dispatch(addMessage(msg))
+    const handleNewChannel = (channel) => dispatch(addChannel(channel))
+    const handleRenameChannel = (channel) =>
       dispatch(renameChannelSuccess(channel))
 
     socket.on('newMessage', handleNewMessage)
