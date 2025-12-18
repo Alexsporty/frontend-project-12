@@ -82,6 +82,9 @@ export default function RenameChannelsModal({ isOpen, onClose, channel }) {
               }) => (
                 <BootstrapForm onSubmit={handleSubmit}>
                   <BootstrapForm.Group className="mb-3">
+                    <BootstrapForm.Label htmlFor="rename-channel">
+                      Имя канала
+                    </BootstrapForm.Label>
                     <BootstrapForm.Control
                       type="text"
                       name="name"

@@ -176,6 +176,7 @@ export default function ChatGroup() {
                           currentChannelId
                         )} rounded-end`}
                         data-bs-toggle="dropdown"
+                        aria-label="Управление каналом"
                       >
                         <span className="visually-hidden">
                           Управление каналом
@@ -245,7 +246,7 @@ export default function ChatGroup() {
                       placeholder="Введите сообщение..."
                       className="border-0 p-0 ps-2 form-control"
                       value={message}
-                    /> 
+                    />
                     <button
                       type="submit"
                       disabled=""
