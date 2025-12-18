@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-import React from 'react'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { Button, Form as BootstrapForm } from 'react-bootstrap'

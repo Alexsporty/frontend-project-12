@@ -24,7 +24,7 @@ export default [
       react: {
         version: 'detect',
       },
-    },    
+    },
     plugins: {
       react: pluginReact,
     },
