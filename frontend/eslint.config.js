@@ -1,44 +1,94 @@
-/* eslint-disable no-undef */
-import globals from 'globals';
+import js from '@eslint/js'
+import globals from 'globals'
+import reactPlugin from 'eslint-plugin-react'
+import reactHooks from 'eslint-plugin-react-hooks'
+import stylistic from '@stylistic/eslint-plugin'
 
-export default {
-  root: true,
-  env: {
-    browser: true,
-    node: true,
-    es2021: true,
-  },
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    ecmaFeatures: {
-      jsx: true,
+export default [
+  js.configs.recommended,
+  {
+    files: ['**/*.js', '**/*.jsx'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      globals: {
+        ...globals.browser,
+        ...globals.es2021,
+        ...globals.node,
+      },
+    },
+    plugins: {
+      'react': reactPlugin,
+      'react-hooks': reactHooks,
+      '@stylistic': stylistic,
+    },
+    rules: {
+      ...js.configs.recommended.rules,
+      ...reactPlugin.configs.recommended.rules,
+      ...reactHooks.configs.recommended.rules,
+
+      '@stylistic/quotes': ['error', 'single'],
+      '@stylistic/semi': ['error', 'never'],
+      '@stylistic/arrow-parens': [
+        'error',
+        'as-needed',
+        {
+          requireForBlockBody: true,
+        },
+      ],
+      '@stylistic/brace-style': ['error', '1tbs'],
+      '@stylistic/no-trailing-spaces': 'error',
+      '@stylistic/no-multiple-empty-lines': ['error', { max: 1 }],
+      '@stylistic/eol-last': ['error', 'always'],
+      '@stylistic/spaced-comment': ['error', 'always'],
+      '@stylistic/indent': ['error', 2],
+      '@stylistic/quote-props': ['error', 'consistent-as-needed'],
+      '@stylistic/comma-dangle': ['error', 'always-multiline'],
+
+      '@stylistic/jsx-one-expression-per-line': [
+        'error',
+        { allow: 'single-child' },
+      ],
+      '@stylistic/jsx-closing-tag-location': 'error',
+      '@stylistic/multiline-ternary': ['error', 'always'],
+      '@stylistic/operator-linebreak': ['error', 'before'],
+
+      'react/prop-types': 'off',
+      'react/react-in-jsx-scope': 'off',
+      'import/extensions': 'off',
+      'import/no-unresolved': 'off',
+      'no-console': 'off',
+      'no-underscore-dangle': [
+        'error',
+        {
+          allow: ['__filename', '__dirname'],
+        },
+      ],
+      'react/function-component-definition': [
+        'error',
+        {
+          namedComponents: 'arrow-function',
+        },
+      ],
+      'react/jsx-filename-extension': [
+        'warn',
+        {
+          extensions: ['.js', '.jsx'],
+        },
+      ],
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
     },
   },
-  settings: {
-    react: {
-      version: 'detect',
-    },
+  {
+    ignores: ['node_modules/**', 'dist/**', 'build/**'],
   },
-  globals: {
-    ...globals.browser,
-    ...globals.node,
-  },
-  rules: {
-    // Отключаем все stylistic правила
-    '@stylistic/arrow-parens': 'off',
-    '@stylistic/brace-style': 'off',
-    '@stylistic/jsx-wrap-multilines': 'off',
-    '@stylistic/jsx-one-expression-per-line': 'off',
-    '@stylistic/jsx-closing-tag-location': 'off',
-    '@stylistic/spaced-comment': 'off',
-
-    // Можно оставить реальные ошибки кода
-    'no-unused-vars': 'warn',
-    'no-undef': 'error',
-  },
-  ignores: [
-    '**/node_modules/**',
-    '**/dist/**',
-  ],
-};
+]
