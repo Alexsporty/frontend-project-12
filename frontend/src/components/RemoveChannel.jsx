@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React from "react"
+import React from 'react'
 
 export default function RemoveChannelModal({ onClose, onConfirm }) {
   return (
@@ -8,7 +8,7 @@ export default function RemoveChannelModal({ onClose, onConfirm }) {
       aria-modal="true"
       className="fade modal show"
       tabIndex="-1"
-      style={{ display: "block" }}
+      style={{ display: 'block' }}
     >
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">

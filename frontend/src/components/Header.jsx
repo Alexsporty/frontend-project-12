@@ -1,8 +1,8 @@
-import React from "react"
-import { useNavigate } from "react-router-dom"
-import { useDispatch, useSelector } from "react-redux"
-import { logoutUser } from "../features/auth/authSlice"
-import { useTranslation } from "react-i18next"
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { logoutUser } from '../features/auth/authSlice'
+import { useTranslation } from 'react-i18next'
 
 export default function Header() {
   const { t } = useTranslation()
@@ -11,10 +11,10 @@ export default function Header() {
 
   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated)
   const handleExit = () => {
-    localStorage.removeItem("token")
-    localStorage.removeItem("username")
+    localStorage.removeItem('token')
+    localStorage.removeItem('username')
     dispatch(logoutUser())
-    navigate("/login")
+    navigate('/login')
   }
 
   return (
@@ -29,7 +29,7 @@ export default function Header() {
             type="button"
             className="btn btn-primary"
           >
-            {t("auth.logoutButton")}
+            {t('auth.logoutButton')}
           </button>
         )}
       </div>

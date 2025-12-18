@@ -1,15 +1,15 @@
 /* eslint-disable react/prop-types */
-import React from "react"
-import { Formik } from "formik"
-import * as Yup from "yup"
-import { Button, Form as BootstrapForm } from "react-bootstrap"
-import { useDispatch, useSelector } from "react-redux"
-import { sendChannels } from "../services/chat"
-import { setCurrentChannel } from "../features/chat/chatSlice"
-import { useTranslation } from "react-i18next"
-import leoProfanity from "leo-profanity"
-leoProfanity.add(leoProfanity.getDictionary("ru"))
-leoProfanity.add(leoProfanity.getDictionary("en"))
+import React from 'react'
+import { Formik } from 'formik'
+import * as Yup from 'yup'
+import { Button, Form as BootstrapForm } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux'
+import { sendChannels } from '../services/chat'
+import { setCurrentChannel } from '../features/chat/chatSlice'
+import { useTranslation } from 'react-i18next'
+import leoProfanity from 'leo-profanity'
+leoProfanity.add(leoProfanity.getDictionary('ru'))
+leoProfanity.add(leoProfanity.getDictionary('en'))
 
 export default function AddChannelsModal({ isOpen, onClose }) {
   const { t } = useTranslation()
@@ -18,7 +18,7 @@ export default function AddChannelsModal({ isOpen, onClose }) {
 
   const censorNameChannel = (value) => {
     const cleaned = leoProfanity.clean(value)
-    return cleaned !== value ? "*".repeat(value.length) : value
+    return cleaned !== value ? '*'.repeat(value.length) : value
   }
 
   if (!isOpen) return null
@@ -26,16 +26,16 @@ export default function AddChannelsModal({ isOpen, onClose }) {
   const validationSchema = Yup.object({
     name: Yup.string()
       .test(
-        "length",
-        t("errors.channelLength"),
+        'length',
+        t('errors.channelLength'),
         (value) => value && value.length >= 3 && value.length <= 20,
       )
       .test(
-        "unique",
-        t("errors.channelAlready"),
+        'unique',
+        t('errors.channelAlready'),
         (value) => !channels.some((c) => c.name === value),
       )
-      .required(t("errors.requiredField")),
+      .required(t('errors.requiredField')),
   })
 
   return (
@@ -45,12 +45,12 @@ export default function AddChannelsModal({ isOpen, onClose }) {
         aria-modal="true"
         className="fade modal show"
         tabIndex="-1"
-        style={{ display: "block" }}
+        style={{ display: 'block' }}
       >
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
-              <div className="modal-title h4">{t("newChannel.addChannel")}</div>
+              <div className="modal-title h4">{t('newChannel.addChannel')}</div>
               <button
                 onClick={onClose}
                 type="button"
@@ -60,7 +60,7 @@ export default function AddChannelsModal({ isOpen, onClose }) {
             </div>
             <div className="modal-body">
               <Formik
-                initialValues={{ name: "" }}
+                initialValues={{ name: '' }}
                 validationSchema={validationSchema}
                 onSubmit={async (values, { setSubmitting, setErrors }) => {
                   const channelName = censorNameChannel(values.name)
@@ -74,7 +74,7 @@ export default function AddChannelsModal({ isOpen, onClose }) {
                     onClose()
                   } catch (err) {
                     setErrors({
-                      name: err.message || t("errors.failedAddChannel"),
+                      name: err.message || t('errors.failedAddChannel'),
                     })
                   } finally {
                     setSubmitting(false)
@@ -111,14 +111,14 @@ export default function AddChannelsModal({ isOpen, onClose }) {
                         className="me-2"
                         onClick={onClose}
                       >
-                        {t("newChannel.cancel")}
+                        {t('newChannel.cancel')}
                       </Button>
                       <Button
                         type="submit"
                         variant="primary"
                         disabled={isSubmitting}
                       >
-                        {t("newChannel.create")}
+                        {t('newChannel.create')}
                       </Button>
                     </div>
                   </BootstrapForm>

@@ -1,22 +1,22 @@
-import React from "react"
-import { useEffect, useState, useRef } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import React from 'react'
+import { useEffect, useState, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   initData,
   sendMessage,
   sendChannels,
   removeChannel,
   renameChannel,
-} from "../services/chat"
-import RemoveChannelModal from "./RemoveChannel"
-import useChatSocket from "../hooks/useChatSocket"
-import AddChannelsModal from "./AddChannelModal"
-import RenameChannelsModal from "./RenameChannelModal"
-import { setCurrentChannel } from "../features/chat/chatSlice"
-import { useTranslation } from "react-i18next"
-import leoProfanity from "leo-profanity"
-leoProfanity.add(leoProfanity.getDictionary("ru"))
-leoProfanity.add(leoProfanity.getDictionary("en"))
+} from '../services/chat'
+import RemoveChannelModal from './RemoveChannel'
+import useChatSocket from '../hooks/useChatSocket'
+import AddChannelsModal from './AddChannelModal'
+import RenameChannelsModal from './RenameChannelModal'
+import { setCurrentChannel } from '../features/chat/chatSlice'
+import { useTranslation } from 'react-i18next'
+import leoProfanity from 'leo-profanity'
+leoProfanity.add(leoProfanity.getDictionary('ru'))
+leoProfanity.add(leoProfanity.getDictionary('en'))
 
 export default function ChatGroup() {
   const { t } = useTranslation()
@@ -27,7 +27,7 @@ export default function ChatGroup() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [isRenameModalOpen, setIsRenameModalOpen] = useState(false)
   const [channelToRename, setChannelToRename] = useState(null)
-  const [message, setMessage] = useState("")
+  const [message, setMessage] = useState('')
   const [channelToRemove, setChannelToRemove] = useState(null)
   const dispatch = useDispatch()
   const messageInputRef = useRef(null)
@@ -50,11 +50,11 @@ export default function ChatGroup() {
     }
   }, [currentChannelId])
 
-  if (status === "loading") {
+  if (status === 'loading') {
     return (
       <div
         className="d-flex justify-content-center align-items-center"
-        style={{ height: "100vh" }}
+        style={{ height: '100vh' }}
       >
         <div className="spinner-border text-primary" role="status">
           <span className="visually-hidden">Loading...</span>
@@ -63,13 +63,13 @@ export default function ChatGroup() {
     )
   }
 
-  if (status === "failed") {
-    return <b>{t("errors.failed")}</b>
+  if (status === 'failed') {
+    return <b>{t('errors.failed')}</b>
   }
 
   const getChannelButtonClass = (channelId, currentChannelId) => {
     return `w-100 rounded-0 text-start btn ${
-      channelId === currentChannelId ? "btn-secondary" : "btn-light"
+      channelId === currentChannelId ? 'btn-secondary' : 'btn-light'
     }`
   }
 
@@ -102,7 +102,7 @@ export default function ChatGroup() {
   }
 
   const censor = (value) =>
-    leoProfanity.check(value) ? "*".repeat(value.length) : value
+    leoProfanity.check(value) ? '*'.repeat(value.length) : value
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -117,7 +117,7 @@ export default function ChatGroup() {
         username,
       }),
     )
-    setMessage("")
+    setMessage('')
 
     if (messageInputRef.current) {
       messageInputRef.current.focus()
@@ -129,7 +129,7 @@ export default function ChatGroup() {
         <div className="row h-100 bg-white flex-md-row">
           <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
             <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
-              <b>{t("chatChannel.channels")}</b>
+              <b>{t('chatChannel.channels')}</b>
               <button
                 onClick={handleOpen}
                 type="button"
@@ -189,7 +189,7 @@ export default function ChatGroup() {
                             className="dropdown-item text-danger"
                             onClick={() => setChannelToRemove(group)}
                           >
-                            {t("chatChannel.deleteChannel")}
+                            {t('chatChannel.deleteChannel')}
                           </button>
                         </li>
                         <li>
@@ -197,7 +197,7 @@ export default function ChatGroup() {
                             className="dropdown-item"
                             onClick={() => handleOpenRename(group)}
                           >
-                            {t("chatChannel.renameChannel")}
+                            {t('chatChannel.renameChannel')}
                           </button>
                         </li>
                       </ul>
@@ -214,8 +214,8 @@ export default function ChatGroup() {
                   <b># {selectedChannel()}</b>
                 </p>
                 <span className="text-muted">
-                  {" "}
-                  {countMessages()} {t("chatChannel.countMessages")}
+                  {' '}
+                  {countMessages()} {t('chatChannel.countMessages')}
                 </span>
               </div>
               <div
@@ -265,7 +265,7 @@ export default function ChatGroup() {
                         ></path>
                       </svg>
                       <span className="visually-hidden">
-                        {t("chatChannel.sendMessage")}
+                        {t('chatChannel.sendMessage')}
                       </span>
                     </button>
                   </div>

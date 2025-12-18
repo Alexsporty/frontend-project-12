@@ -1,5 +1,5 @@
 // socket.js
-import { io } from "socket.io-client"
+import { io } from 'socket.io-client'
 
 let socket = null
 
@@ -7,8 +7,8 @@ export const initSocket = (token) => {
   if (!socket) {
     socket = io({ auth: { token } })
 
-    socket.on("connect", () => {
-      console.log("Socket connected")
+    socket.on('connect', () => {
+      console.log('Socket connected')
     })
   }
 
@@ -17,7 +17,7 @@ export const initSocket = (token) => {
 
 export const getSocket = () => {
   if (!socket) {
-    throw new Error("Socket not initialized")
+    throw new Error('Socket not initialized')
   }
   return socket
 }
