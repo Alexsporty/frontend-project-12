@@ -1,4 +1,7 @@
-export default function RemoveChannelModal({ channel, onClose, onConfirm }) {
+/* eslint-disable react/prop-types */
+import React from "react";
+
+export default function RemoveChannelModal({ onClose, onConfirm }) {
     return (
       <div
         role="dialog"

@@ -1,7 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { loginUser, signupUser } from '../../services/auth.js';
-import { toast } from 'react-toastify';
-import i18n from '../../init';
 
 const authSlice = createSlice({
   name: 'auth',

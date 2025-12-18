@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom/client';
+import React from 'react';
 import { Provider } from 'react-redux';
-import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
 import App from './components/App.jsx';
 import store from './app/store.js';
