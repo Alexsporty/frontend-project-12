@@ -5,6 +5,9 @@ import { Button, Form as BootstrapForm } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { renameChannel } from '../services/chat';
 import { useTranslation } from 'react-i18next';
+import leoProfanity from 'leo-profanity';
+leoProfanity.add(leoProfanity.getDictionary('ru'));
+leoProfanity.add(leoProfanity.getDictionary('en'));
 
 export default function RenameChannelsModal({ isOpen, onClose, channel }) {
   const { t } = useTranslation();
@@ -12,6 +15,11 @@ export default function RenameChannelsModal({ isOpen, onClose, channel }) {
   const channels = useSelector((state) => state.chat.channels);
 
   if (!isOpen || !channel) return null;
+
+  const censorChannelName = (value) => {
+    const cleaned = leoProfanity.clean(value);
+    return cleaned !== value ? '*'.repeat(value.lenght) : value;
+  };
 
   const validationSchema = Yup.object({
     name: Yup.string()
@@ -50,9 +58,10 @@ export default function RenameChannelsModal({ isOpen, onClose, channel }) {
               initialValues={{ name: channel.name }}
               validationSchema={validationSchema}
               onSubmit={async (values, { setSubmitting, setErrors }) => {
+                const renameCensor = censorChannelName(values.name);
                 try {
                   await dispatch(
-                    renameChannel({ id: channel.id, name: values.name })
+                    renameChannel({ id: channel.id, name: renameCensor })
                   ).unwrap();
                   onClose();
                 } catch (err) {

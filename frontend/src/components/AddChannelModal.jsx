@@ -7,12 +7,19 @@ import { sendChannels } from '../services/chat';
 import { setCurrentChannel } from '../features/chat/chatSlice';
 import { useTranslation } from 'react-i18next';
 import leoProfanity from 'leo-profanity';
+leoProfanity.add(leoProfanity.getDictionary('ru'));
+leoProfanity.add(leoProfanity.getDictionary('en'));
 
 export default function AddChannelsModal({ isOpen, onClose }) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const channels = useSelector((state) => state.chat.channels);
-  console.log(channels);
+
+  const censorNameChannel = (value) => {
+    const cleaned = leoProfanity.clean(value);
+    return cleaned !== value ? '*'.repeat(value.length) : value;
+  };
+
   if (!isOpen) return null;
 
   const validationSchema = Yup.object({
@@ -55,9 +62,9 @@ export default function AddChannelsModal({ isOpen, onClose }) {
                 initialValues={{ name: '' }}
                 validationSchema={validationSchema}
                 onSubmit={async (values, { setSubmitting, setErrors }) => {
-                  const cleaned = leoProfanity.clean(values.name);
+                  const channelName = censorNameChannel(values.name);
                   const newChannel = await dispatch(
-                    sendChannels({ name: cleaned, removable: true })
+                    sendChannels({ name: channelName, removable: true })
                   ).unwrap();
                   try {
                     if (newChannel?.id) {
@@ -86,7 +93,7 @@ export default function AddChannelsModal({ isOpen, onClose }) {
                         id="name"
                         type="text"
                         name="name"
-                        value={leoProfanity.clean(values.name)}
+                        value={values.name}
                         onChange={handleChange}
                         isInvalid={!!errors.name}
                       />
