@@ -70,12 +70,12 @@ export default function AddChannelsModal({ isOpen, onClose }) {
                       dispatch(setCurrentChannel(newChannel.id))
                     }
                     onClose()
-                  } 
+                  }
                   catch (err) {
                     setErrors({
                       name: err.message || t('errors.failedAddChannel'),
                     })
-                  } 
+                  }
                   finally {
                     setSubmitting(false)
                   }

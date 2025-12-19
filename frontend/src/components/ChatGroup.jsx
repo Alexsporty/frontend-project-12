@@ -211,13 +211,13 @@ export default function ChatGroup() {
               <div className="bg-light mb-4 p-3 shadow-sm small">
                 <p className="m-0">
                   <b>
-                    # 
+                    #
                     {selectedChannel()}
-                    </b>
+                  </b>
                 </p>
                 <span className="text-muted">
                   {' '}
-                  {countMessages()} 
+                  {countMessages()}
                   {t('chatChannel.countMessages')}
                 </span>
               </div>

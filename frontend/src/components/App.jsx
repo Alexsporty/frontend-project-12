@@ -35,12 +35,13 @@ const App = () => {
           <Route
             path="/"
             element={
-              (<ProtectedRoute>
+              (
+              <ProtectedRoute>
                 <ChatGroup />
-              </ProtectedRoute>)
+              </ProtectedRoute>
+              )
             }
-          />
-
+           />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Login isSignup />} />
           <Route path="*" element={<NotFound />} />

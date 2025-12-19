@@ -15,7 +15,7 @@ export const initData = createAsyncThunk(
         messages: responseMessages.data,
         currentChannelId: responseChannels.data.currentChannelId,
       }
-    } 
+    }
     catch (err) {
       return rejectWithValue(handleAxiosError(err))
     }
@@ -29,7 +29,7 @@ export const sendChannels = createAsyncThunk(
       const response = await api.post('/api/v1/channels', { name, removable })
       toastSuccess('success.channelCreated')
       return response.data
-    } 
+    }
     catch (err) {
       return rejectWithValue(handleAxiosError(err))
     }
@@ -43,7 +43,7 @@ export const renameChannel = createAsyncThunk(
       const response = await api.patch(`/api/v1/channels/${id}`, { name })
       toastSuccess('success.channelRenamed')
       return response.data.channel ? response.data.channel : response.data
-    } 
+    }
     catch (err) {
       return rejectWithValue(handleAxiosError(err))
     }
@@ -57,7 +57,7 @@ export const removeChannel = createAsyncThunk(
       await api.delete(`/api/v1/channels/${id}`)
       toastSuccess('success.channelRemoved')
       return id
-    } 
+    }
     catch (err) {
       return rejectWithValue(handleAxiosError(err))
     }
@@ -73,7 +73,7 @@ export const sendMessage = createAsyncThunk(
         channelId,
         username,
       })
-    } 
+    }
     catch (err) {
       return rejectWithValue(handleAxiosError(err))
     }

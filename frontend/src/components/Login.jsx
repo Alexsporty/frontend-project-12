@@ -83,7 +83,7 @@ export default function AuthForm() {
                         username: values.username,
                         password: values.password,
                       })
-                    } 
+                    }
                     else {
                       data = await signupRequest({
                         username: values.username,
@@ -97,15 +97,15 @@ export default function AuthForm() {
                     dispatch(loginUser.fulfilled(data))
 
                     navigate('/')
-                  } 
+                  }
                   catch (err) {
                     if (!isLogin && err.response?.status === 409) {
                       setStatus({ authError: t('errors.usernameAlready') })
-                    } 
+                    }
                     else {
                       setStatus({ authError: t('errors.nameOrPassword') })
                     }
-                  } 
+                  }
                   finally {
                     setSubmitting(false)
                   }

@@ -64,12 +64,12 @@ export default function RenameChannelsModal({ isOpen, onClose, channel }) {
                     renameChannel({ id: channel.id, name: renameCensor }),
                   ).unwrap()
                   onClose()
-                } 
+                }
                 catch (err) {
                   setErrors({
                     name: err.message || t('errors.failedRenameChannel'),
                   })
-                } 
+                }
                 finally {
                   setSubmitting(false)
                 }
