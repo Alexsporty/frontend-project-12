@@ -20,9 +20,9 @@ leoProfanity.add(leoProfanity.getDictionary('en'))
 export default function ChatGroup() {
   const { t } = useTranslation()
   const { channels, messages, currentChannelId, status } = useSelector(
-    (state) => state.chat,
+    state => state.chat,
   )
-  const { username, token } = useSelector((state) => state.auth)
+  const { username, token } = useSelector(state => state.auth)
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [isRenameModalOpen, setIsRenameModalOpen] = useState(false)
   const [channelToRename, setChannelToRename] = useState(null)
@@ -73,10 +73,10 @@ export default function ChatGroup() {
   }
 
   const countMessages = () => {
-    return messages.filter((msg) => msg.channelId === currentChannelId).length
+    return messages.filter(msg => msg.channelId === currentChannelId).length
   }
   const selectedChannel = () => {
-    return channels.find((c) => c.id === currentChannelId)?.name
+    return channels.find(c => c.id === currentChannelId)?.name
   }
 
   const handleOpen = () => setIsAddModalOpen(true)
@@ -100,7 +100,7 @@ export default function ChatGroup() {
     handleCloseRename()
   }
 
-  const censor = (value) =>
+  const censor = value =>
     leoProfanity.check(value) ? '*'.repeat(value.length) : value
 
   const handleSubmit = (e) => {
@@ -152,7 +152,7 @@ export default function ChatGroup() {
               id="channels-box"
               className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block"
             >
-              {channels.map((group) => (
+              {channels.map(group => (
                 <li className="nav-item w-100" key={group.id}>
                   <div className="btn-group w-100" role="group">
                     <button
@@ -210,11 +210,15 @@ export default function ChatGroup() {
             <div className="d-flex flex-column h-100">
               <div className="bg-light mb-4 p-3 shadow-sm small">
                 <p className="m-0">
-                  <b># {selectedChannel()}</b>
+                  <b>
+                    # 
+                    {selectedChannel()}
+                    </b>
                 </p>
                 <span className="text-muted">
                   {' '}
-                  {countMessages()} {t('chatChannel.countMessages')}
+                  {countMessages()} 
+                  {t('chatChannel.countMessages')}
                 </span>
               </div>
               <div
@@ -222,10 +226,12 @@ export default function ChatGroup() {
                 className="chat-messages overflow-auto px-5 "
               >
                 {messages
-                  .filter((msg) => msg.channelId === currentChannelId)
-                  .map((msg) => (
+                  .filter(msg => msg.channelId === currentChannelId)
+                  .map(msg => (
                     <div key={msg.id} className="text-break mb-2">
-                      <b>{msg.username}</b>: {msg.body}
+                      <b>{msg.username}</b>
+                      :
+                      {msg.body}
                     </div>
                   ))}
               </div>
@@ -239,7 +245,7 @@ export default function ChatGroup() {
                     <input
                       ref={messageInputRef}
                       name="body"
-                      onChange={(e) => setMessage(e.target.value)}
+                      onChange={e => setMessage(e.target.value)}
                       aria-label="Новое сообщение"
                       placeholder="Введите сообщение..."
                       className="border-0 p-0 ps-2 form-control"
@@ -261,7 +267,8 @@ export default function ChatGroup() {
                         <path
                           fillRule="evenodd"
                           d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"
-                        ></path>
+                        >
+                        </path>
                       </svg>
                       <span className="visually-hidden">
                         {t('chatChannel.sendMessage')}

@@ -83,7 +83,8 @@ export default function AuthForm() {
                         username: values.username,
                         password: values.password,
                       })
-                    } else {
+                    } 
+                    else {
                       data = await signupRequest({
                         username: values.username,
                         password: values.password,
@@ -96,13 +97,16 @@ export default function AuthForm() {
                     dispatch(loginUser.fulfilled(data))
 
                     navigate('/')
-                  } catch (err) {
+                  } 
+                  catch (err) {
                     if (!isLogin && err.response?.status === 409) {
                       setStatus({ authError: t('errors.usernameAlready') })
-                    } else {
+                    } 
+                    else {
                       setStatus({ authError: t('errors.nameOrPassword') })
                     }
-                  } finally {
+                  } 
+                  finally {
                     setSubmitting(false)
                   }
                 }}
@@ -220,7 +224,8 @@ export default function AuthForm() {
             {isLogin && (
               <div className="card-footer p-4">
                 <div className="text-center">
-                  <span>{t('auth.notAccount')}</span>{' '}
+                  <span>{t('auth.notAccount')}</span>
+                  {' '}
                   <Button
                     variant="link"
                     type="button"

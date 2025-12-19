@@ -12,7 +12,7 @@ leoProfanity.add(leoProfanity.getDictionary('en'))
 export default function AddChannelsModal({ isOpen, onClose }) {
   const { t } = useTranslation()
   const dispatch = useDispatch()
-  const channels = useSelector((state) => state.chat.channels)
+  const channels = useSelector(state => state.chat.channels)
 
   const censorNameChannel = (value) => {
     const cleaned = leoProfanity.clean(value)
@@ -26,12 +26,12 @@ export default function AddChannelsModal({ isOpen, onClose }) {
       .test(
         'length',
         t('errors.channelLength'),
-        (value) => value && value.length >= 3 && value.length <= 20,
+        value => value && value.length >= 3 && value.length <= 20,
       )
       .test(
         'unique',
         t('errors.channelAlready'),
-        (value) => !channels.some((c) => c.name === value),
+        value => !channels.some(c => c.name === value),
       )
       .required(t('errors.requiredField')),
   })
@@ -70,11 +70,13 @@ export default function AddChannelsModal({ isOpen, onClose }) {
                       dispatch(setCurrentChannel(newChannel.id))
                     }
                     onClose()
-                  } catch (err) {
+                  } 
+                  catch (err) {
                     setErrors({
                       name: err.message || t('errors.failedAddChannel'),
                     })
-                  } finally {
+                  } 
+                  finally {
                     setSubmitting(false)
                   }
                 }}

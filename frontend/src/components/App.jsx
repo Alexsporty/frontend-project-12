@@ -35,9 +35,9 @@ const App = () => {
           <Route
             path="/"
             element={
-              <ProtectedRoute>
+              (<ProtectedRoute>
                 <ChatGroup />
-              </ProtectedRoute>
+              </ProtectedRoute>)
             }
           />
 

@@ -1,5 +1,4 @@
-/* eslint-disable no-undef */
-import globals from 'globals';
+import globals from 'globals'
 
 export default {
   root: true,
@@ -41,4 +40,4 @@ export default {
     '**/node_modules/**',
     '**/dist/**',
   ],
-};
+}

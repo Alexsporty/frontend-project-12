@@ -18,7 +18,8 @@ export const loginUser = createAsyncThunk(
     try {
       const data = await loginRequest(credentials)
       return data
-    } catch (err) {
+    } 
+    catch (err) {
       return rejectWithValue(handleAxiosError(err))
     }
   },
@@ -30,7 +31,8 @@ export const signupUser = createAsyncThunk(
     try {
       const data = await signupRequest(credentials)
       return data
-    } catch (err) {
+    } 
+    catch (err) {
       return rejectWithValue(handleAxiosError(err))
     }
   },

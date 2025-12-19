@@ -8,7 +8,7 @@ export default function Header() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const isLoggedIn = useSelector((state) => state.auth.isAuthenticated)
+  const isLoggedIn = useSelector(state => state.auth.isAuthenticated)
   const handleExit = () => {
     localStorage.removeItem('token')
     localStorage.removeItem('username')
