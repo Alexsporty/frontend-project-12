@@ -3,7 +3,7 @@ import { Button, Form as BootstrapForm } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { sendChannels } from '../services/chat'
 import { setCurrentChannel } from '../features/chat/chatSlice'
-import { addChannelSchema } from '../shemas/AddChannel'
+import { addChannelSchema } from '../shemas/addChannel'
 import { useTranslation } from 'react-i18next'
 import leoProfanity from 'leo-profanity'
 leoProfanity.add(leoProfanity.getDictionary('ru'))
