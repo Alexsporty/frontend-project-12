@@ -1,9 +1,9 @@
 import { Formik } from 'formik'
-import * as Yup from 'yup'
 import { Button, Form as BootstrapForm } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { sendChannels } from '../services/chat'
 import { setCurrentChannel } from '../features/chat/chatSlice'
+import { addChannelSchema } from '../shemas/AddChannel'
 import { useTranslation } from 'react-i18next'
 import leoProfanity from 'leo-profanity'
 leoProfanity.add(leoProfanity.getDictionary('ru'))
@@ -21,20 +21,7 @@ export default function AddChannelsModal({ isOpen, onClose }) {
 
   if (!isOpen) return null
 
-  const validationSchema = Yup.object({
-    name: Yup.string()
-      .test(
-        'length',
-        t('errors.channelLength'),
-        value => value && value.length >= 3 && value.length <= 20,
-      )
-      .test(
-        'unique',
-        t('errors.channelAlready'),
-        value => !channels.some(c => c.name === value),
-      )
-      .required(t('errors.requiredField')),
-  })
+  const validate = addChannelSchema(t, channels)
 
   return (
     <>
@@ -59,7 +46,7 @@ export default function AddChannelsModal({ isOpen, onClose }) {
             <div className="modal-body">
               <Formik
                 initialValues={{ name: '' }}
-                validationSchema={validationSchema}
+                validationSchema={validate}
                 onSubmit={async (values, { setSubmitting, setErrors }) => {
                   const channelName = censorNameChannel(values.name)
                   const newChannel = await dispatch(

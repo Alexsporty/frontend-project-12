@@ -21,7 +21,7 @@ export default {
         channels: 'Каналы',
         renameChannel: 'Переименовать',
         deleteChannel: 'Удалить',
-        countMessages: 'сообщений',
+        countMessages: ' сообщений',
         sendMessage: 'отправить',
       },
       newChannel: {

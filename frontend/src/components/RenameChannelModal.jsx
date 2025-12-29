@@ -1,17 +1,17 @@
 import { Formik } from 'formik'
-import * as Yup from 'yup'
 import { Button, Form as BootstrapForm } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { renameChannel } from '../services/chat'
 import { useTranslation } from 'react-i18next'
 import leoProfanity from 'leo-profanity'
+import { renameChannelSchema } from '../shemas/renameChannelSchema'
 leoProfanity.add(leoProfanity.getDictionary('ru'))
 leoProfanity.add(leoProfanity.getDictionary('en'))
 
 export default function RenameChannelsModal({ isOpen, onClose, channel }) {
   const { t } = useTranslation()
   const dispatch = useDispatch()
-  const channels = useSelector(state => state.chat.channels)
+  const channels = useSelector((state) => state.chat.channels)
 
   if (!isOpen || !channel) return null
 
@@ -19,19 +19,23 @@ export default function RenameChannelsModal({ isOpen, onClose, channel }) {
     const cleaned = leoProfanity.clean(value)
     return cleaned !== value ? '*'.repeat(value.lenght) : value
   }
+  const validate = renameChannelSchema(t, channels, channel.id)
 
-  const validationSchema = Yup.object({
-    name: Yup.string()
-      .min(3, t('errors.channelLength'))
-      .max(20, t('errors.channelLength'))
-      .test(
-        'unique',
-        t('errors.channelAlready'),
-        value =>
-          !channels.some(c => c.name === value && c.id !== channel.id),
-      )
-      .required(t('errors.requiredField')),
-  })
+  const onSubmit = async (values, { setSubmitting, setErrors }) => {
+    const renameCensor = censorChannelName(values.name)
+    try {
+      await dispatch(
+        renameChannel({ id: channel.id, name: renameCensor }),
+      ).unwrap()
+      onClose()
+    } catch (err) {
+      setErrors({
+        name: err.message || t('errors.failedRenameChannel'),
+      })
+    } finally {
+      setSubmitting(false)
+    }
+  }
 
   return (
     <div
@@ -56,24 +60,8 @@ export default function RenameChannelsModal({ isOpen, onClose, channel }) {
             <Formik
               initialValues={{ name: channel.name }}
               enableReinitialize
-              validationSchema={validationSchema}
-              onSubmit={async (values, { setSubmitting, setErrors }) => {
-                const renameCensor = censorChannelName(values.name)
-                try {
-                  await dispatch(
-                    renameChannel({ id: channel.id, name: renameCensor }),
-                  ).unwrap()
-                  onClose()
-                }
-                catch (err) {
-                  setErrors({
-                    name: err.message || t('errors.failedRenameChannel'),
-                  })
-                }
-                finally {
-                  setSubmitting(false)
-                }
-              }}
+              validationSchema={validate}
+              onSubmit={onSubmit}
             >
               {({
                 values,

@@ -1,8 +1,8 @@
 import { Formik } from 'formik'
-import * as Yup from 'yup'
 import { useNavigate, Navigate, useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { loginUser, loginRequest, signupRequest } from '../services/auth.js'
+import { loginSchema, signupSchema } from '../shemas/loginSchema.js'
 import { Alert, Container, Row, Col, Button } from 'react-bootstrap'
 import { useTranslation } from 'react-i18next'
 
@@ -17,29 +17,42 @@ export default function AuthForm() {
 
   const isLogin = location.pathname === '/login'
 
-  const signupSchema = Yup.object().shape({
-    username: Yup.string()
-      .required(t('errors.requiredField'))
-      .min(3, t('errors.usernameLength'))
-      .max(20, t('errors.usernameLength')),
-    password: Yup.string()
-      .required(t('errors.requiredField'))
-      .min(6, t('errors.passwordLength')),
-    confirmPassword: Yup.string().when('password', (password, schema) =>
-      !isLogin
-        ? schema
-            .required(t('errors.requiredPassword'))
-            .oneOf([Yup.ref('password')], t('auth.passwordMismatch'))
-        : schema,
-    ),
-  })
+  const login = loginSchema(t, isLogin)
+  const sign = signupSchema(t)
 
-  const loginSchema = Yup.object().shape({
-    username: Yup.string().required(t('errors.pass')),
-    password: Yup.string().required(t('errors.pass')),
-  })
+  const validationSchema = isLogin ? login : sign
 
-  const validationSchema = isLogin ? loginSchema : signupSchema
+  const onSubmit = async (values, { setSubmitting, setStatus }) => {
+    try {
+      let data
+      if (isLogin) {
+        data = await loginRequest({
+          username: values.username,
+          password: values.password,
+        })
+      } else {
+        data = await signupRequest({
+          username: values.username,
+          password: values.password,
+        })
+      }
+
+      localStorage.setItem('token', data.token)
+      localStorage.setItem('username', data.username)
+
+      dispatch(loginUser.fulfilled(data))
+
+      navigate('/')
+    } catch (err) {
+      if (!isLogin && err.response?.status === 409) {
+        setStatus({ authError: t('errors.usernameAlready') })
+      } else {
+        setStatus({ authError: t('errors.nameOrPassword') })
+      }
+    } finally {
+      setSubmitting(false)
+    }
+  }
 
   return (
     <Container className="mt-5">
@@ -74,42 +87,7 @@ export default function AuthForm() {
                   confirmPassword: '',
                 }}
                 validationSchema={validationSchema}
-                onSubmit={async (values, { setSubmitting, setStatus }) => {
-                  try {
-                    let data
-
-                    if (isLogin) {
-                      data = await loginRequest({
-                        username: values.username,
-                        password: values.password,
-                      })
-                    }
-                    else {
-                      data = await signupRequest({
-                        username: values.username,
-                        password: values.password,
-                      })
-                    }
-
-                    localStorage.setItem('token', data.token)
-                    localStorage.setItem('username', data.username)
-
-                    dispatch(loginUser.fulfilled(data))
-
-                    navigate('/')
-                  }
-                  catch (err) {
-                    if (!isLogin && err.response?.status === 409) {
-                      setStatus({ authError: t('errors.usernameAlready') })
-                    }
-                    else {
-                      setStatus({ authError: t('errors.nameOrPassword') })
-                    }
-                  }
-                  finally {
-                    setSubmitting(false)
-                  }
-                }}
+                onSubmit={onSubmit}
               >
                 {({
                   values,
@@ -224,8 +202,7 @@ export default function AuthForm() {
             {isLogin && (
               <div className="card-footer p-4">
                 <div className="text-center">
-                  <span>{t('auth.notAccount')}</span>
-                  {' '}
+                  <span>{t('auth.notAccount')}</span>{' '}
                   <Button
                     variant="link"
                     type="button"

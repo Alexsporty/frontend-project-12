@@ -231,6 +231,7 @@ export default function ChatGroup() {
                     <div key={msg.id} className="text-break mb-2">
                       <b>{msg.username}</b>
                       :
+                      {' '}
                       {msg.body}
                     </div>
                   ))}
