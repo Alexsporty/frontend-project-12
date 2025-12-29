@@ -18,7 +18,7 @@ export const signupSchema = (t, isLogin) =>
     ),
   })
 
-export const loginSchema = (t) =>
+export const loginSchema = t =>
   Yup.object().shape({
     username: Yup.string().required(t('errors.pass')),
     password: Yup.string().required(t('errors.pass')),

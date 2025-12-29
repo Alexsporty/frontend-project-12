@@ -44,7 +44,7 @@ export default function AuthForm() {
       dispatch(loginUser.fulfilled(data))
 
       navigate('/')
-    } 
+    }
     catch (err) {
       if (!isLogin && err.response?.status === 409) {
         setStatus({ authError: t('errors.usernameAlready') })
