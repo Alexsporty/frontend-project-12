@@ -11,7 +11,7 @@ leoProfanity.add(leoProfanity.getDictionary('en'))
 export default function RenameChannelsModal({ isOpen, onClose, channel }) {
   const { t } = useTranslation()
   const dispatch = useDispatch()
-  const channels = useSelector((state) => state.chat.channels)
+  const channels = useSelector(state => state.chat.channels)
 
   if (!isOpen || !channel) return null
 
@@ -28,11 +28,13 @@ export default function RenameChannelsModal({ isOpen, onClose, channel }) {
         renameChannel({ id: channel.id, name: renameCensor }),
       ).unwrap()
       onClose()
-    } catch (err) {
+    }
+    catch (err) {
       setErrors({
         name: err.message || t('errors.failedRenameChannel'),
       })
-    } finally {
+    }
+    finally {
       setSubmitting(false)
     }
   }

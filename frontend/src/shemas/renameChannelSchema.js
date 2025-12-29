@@ -8,8 +8,8 @@ export const renameChannelSchema = (t, channels, currentChannelId = null) =>
       .test(
         'unique',
         t('errors.channelAlready'),
-        (value) =>
-          !channels.some((c) => c.name === value && c.id !== currentChannelId),
+        value =>
+          !channels.some(c => c.name === value && c.id !== currentChannelId),
       )
       .required(t('errors.requiredField')),
   })
